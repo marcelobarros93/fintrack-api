@@ -42,15 +42,18 @@ public class BillScheduler {
         LocalDate now = LocalDate.now();
         int year = now.getYear();
         Month month = now.getMonth();
+        int lastDayOfMonth = month.length(now.isLeapYear());
 
         plannings.forEach(planning -> {
+            int dueDay = planning.getDueDay() > lastDayOfMonth ? lastDayOfMonth : planning.getDueDay();
+
             if(planning.getType().equals(BillType.EXPENSE)) {
                 Expense expense = expenseService.buildByPlanning(
-                        planning, LocalDate.of(year, month, planning.getDueDay()));
+                        planning, LocalDate.of(year, month, dueDay));
                 expenses.add(expense);
             } else {
                 Income income = incomeService.buildByPlanning(
-                        planning, LocalDate.of(year, month, planning.getDueDay()));
+                        planning, LocalDate.of(year, month, dueDay));
                 incomes.add(income);
             }
         });
