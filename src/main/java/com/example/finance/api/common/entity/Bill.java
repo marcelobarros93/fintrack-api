@@ -43,12 +43,13 @@ public abstract class Bill extends AbstractEntity {
     @JoinColumn(name = "planning_id")
     private Planning planning;
 
-    protected Bill(Long id, String description, BigDecimal amount, StatusType status, LocalDate dateDue) {
+    protected Bill(Long id, String description, BigDecimal amount, StatusType status, LocalDate dateDue, Planning planning) {
         super(id);
         this.description = description;
         this.amount = amount;
         this.status = status;
         this.dateDue = dateDue;
+        this.planning = planning;
     }
 
     public boolean isPaid() {

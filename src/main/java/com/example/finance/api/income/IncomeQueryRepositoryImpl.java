@@ -38,22 +38,22 @@ public class IncomeQueryRepositoryImpl implements IncomeQueryRepository {
 
             if(filter.dateDueStart() != null) {
                 predicates.add(builder.greaterThanOrEqualTo(
-                        income.get("dateDueStart"), filter.dateDueStart()));
+                        income.get("dateDue"), filter.dateDueStart()));
             }
 
             if(filter.dateDueEnd() != null) {
                 predicates.add(builder.lessThanOrEqualTo(
-                        income.get("dateDueEnd"), filter.dateDueEnd()));
+                        income.get("dateDue"), filter.dateDueEnd()));
             }
 
             if(filter.dateReceiptStart() != null) {
                 predicates.add(builder.greaterThanOrEqualTo(
-                        income.get("dateReceiptStart"), filter.dateReceiptStart()));
+                        income.get("dateReceipt"), filter.dateReceiptStart()));
             }
 
             if(filter.dateReceiptEnd() != null) {
                 predicates.add(builder.lessThanOrEqualTo(
-                        income.get("dateReceiptEnd"), filter.dateReceiptEnd()));
+                        income.get("dateReceipt"), filter.dateReceiptEnd()));
             }
 
             return builder.and(predicates.toArray(Predicate[]::new));

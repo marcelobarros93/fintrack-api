@@ -3,11 +3,15 @@ package com.example.finance.api.income;
 import com.example.finance.api.common.enums.StatusType;
 import com.example.finance.api.common.exception.BusinessException;
 import com.example.finance.api.common.exception.IncomeNotFoundException;
+import com.example.finance.api.planning.Planning;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -73,5 +77,20 @@ public class IncomeService {
         }
 
         incomeRepository.deleteById(id);
+    }
+
+    public Income buildByPlanning(Planning planning, LocalDate dateDue) {
+        return Income.builder()
+                .status(StatusType.OPEN)
+                .dateDue(dateDue)
+                .description(planning.getDescription())
+                .amount(planning.getAmount())
+                .planning(planning)
+                .build();
+    }
+
+    @Transactional
+    public void create(List<Income> incomes) {
+        incomes.forEach(this::create);
     }
 }

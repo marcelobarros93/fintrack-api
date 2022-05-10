@@ -2,6 +2,7 @@ package com.example.finance.api.income;
 
 import com.example.finance.api.common.entity.Bill;
 import com.example.finance.api.common.enums.StatusType;
+import com.example.finance.api.planning.Planning;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,8 +30,8 @@ public class Income extends Bill {
 
     @Builder
     public Income(Long id, LocalDateTime dateReceipt, String description, BigDecimal amount,
-                  StatusType status, LocalDate dateDue) {
-        super(id, description, amount, status, dateDue);
+                  StatusType status, LocalDate dateDue, Planning planning) {
+        super(id, description, amount, status, dateDue, planning);
         this.dateReceipt = dateReceipt;
     }
 

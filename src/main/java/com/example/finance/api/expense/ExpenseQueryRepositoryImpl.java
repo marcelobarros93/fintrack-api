@@ -38,22 +38,22 @@ public class ExpenseQueryRepositoryImpl implements ExpenseQueryRepository {
 
             if(filter.dateDueStart() != null) {
                 predicates.add(builder.greaterThanOrEqualTo(
-                        expense.get("dateDueStart"), filter.dateDueStart()));
+                        expense.get("dateDue"), filter.dateDueStart()));
             }
 
             if(filter.dateDueEnd() != null) {
                 predicates.add(builder.lessThanOrEqualTo(
-                        expense.get("dateDueEnd"), filter.dateDueEnd()));
+                        expense.get("dateDue"), filter.dateDueEnd()));
             }
 
             if(filter.datePaymentStart() != null) {
                 predicates.add(builder.greaterThanOrEqualTo(
-                        expense.get("datePaymentStart"), filter.datePaymentStart()));
+                        expense.get("datePayment"), filter.datePaymentStart()));
             }
 
             if(filter.datePaymentEnd() != null) {
                 predicates.add(builder.lessThanOrEqualTo(
-                        expense.get("datePaymentEnd"), filter.datePaymentEnd()));
+                        expense.get("datePayment"), filter.datePaymentEnd()));
             }
 
             return builder.and(predicates.toArray(Predicate[]::new));

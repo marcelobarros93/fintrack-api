@@ -2,6 +2,8 @@ package com.example.finance.api.expense;
 
 import com.example.finance.api.common.entity.Bill;
 import com.example.finance.api.common.enums.StatusType;
+import com.example.finance.api.planning.Planning;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -28,8 +31,8 @@ public class Expense extends Bill {
 
     @Builder
     public Expense(Long id, String description, BigDecimal amount, StatusType status,
-                    LocalDate dateDue, LocalDateTime datePayment) {
-        super(id, description, amount, status, dateDue);
+                   LocalDate dateDue, LocalDateTime datePayment, Planning planning) {
+        super(id, description, amount, status, dateDue, planning);
         this.datePayment = datePayment;
     }
 
