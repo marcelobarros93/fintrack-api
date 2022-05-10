@@ -32,7 +32,7 @@ class IncomeServiceTest {
     private IncomeRepository incomeRepository;
 
     @Test
-    void create_ShouldCreateOpenIncome_WhenCreate() {
+    void create_ShouldCreateOpenIncome_WhenValidParameters() {
         Income income = Income.builder()
                 .id(1L)
                 .description(description())

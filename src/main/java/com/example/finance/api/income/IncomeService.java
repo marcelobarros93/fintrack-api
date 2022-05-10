@@ -30,7 +30,7 @@ public class IncomeService {
         }
 
         var incomeSaved = findById(id);
-        BeanUtils.copyProperties(income, incomeSaved, "id", "status");
+        BeanUtils.copyProperties(income, incomeSaved, "id", "status", "version", "createdAt", "updatedAt");
         return incomeRepository.save(incomeSaved);
     }
 

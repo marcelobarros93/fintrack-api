@@ -8,16 +8,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 
 @RequiredArgsConstructor
 public class IncomeQueryRepositoryImpl implements IncomeQueryRepository {
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @Autowired @Lazy
     private IncomeRepository incomeRepository;

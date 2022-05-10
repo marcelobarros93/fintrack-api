@@ -10,9 +10,6 @@ import org.hibernate.Hibernate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -27,21 +24,14 @@ import java.util.Objects;
 @NoArgsConstructor
 public class Income extends Bill {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
-
     @Column(name = "date_receipt")
     private LocalDateTime dateReceipt;
 
     @Builder
-    public Income(Long id, LocalDateTime dateReceipt, String description,
-                  BigDecimal amount, StatusType status, LocalDate dateDue) {
-        super(description, amount, status, dateDue);
-        this.id = id;
+    public Income(Long id, LocalDateTime dateReceipt, String description, BigDecimal amount,
+                  StatusType status, LocalDate dateDue) {
+        super(id, description, amount, status, dateDue);
         this.dateReceipt = dateReceipt;
-
     }
 
     @Override
@@ -49,7 +39,7 @@ public class Income extends Bill {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         Income expense = (Income) o;
-        return id != null && Objects.equals(id, expense.id);
+        return getId() != null && Objects.equals(getId(), expense.getId());
     }
 
     @Override

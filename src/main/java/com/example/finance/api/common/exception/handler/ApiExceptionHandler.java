@@ -11,6 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.persistence.OptimisticLockException;
 import java.time.Instant;
 import java.util.List;
 
@@ -36,18 +37,27 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<ApiError> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ApiError> handleMethodArgumentNotValid(MethodArgumentNotValidException e) {
         var status = HttpStatus.BAD_REQUEST;
-        var errors = ex.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
+        var errors = e.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
         var body = buildApiError(status.value(), errors);
         return responseEntity(status, body);
     }
 
     @ExceptionHandler
-    public ResponseEntity<ApiError> handleUncaught(Exception ex) {
-        log.error(ex.getMessage(), ex);
+    public ResponseEntity<ApiError> handleUncaught(Exception e) {
+        log.error(e.getMessage(), e);
         var status = HttpStatus.INTERNAL_SERVER_ERROR;
         var error = buildApiError(status.value(), GENERIC_ERROR_MESSAGE);
+        return responseEntity(status, error);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ApiError> handleOptimisticLockException(OptimisticLockException e) {
+        log.error(e.getMessage(), e);
+        HttpStatus status = HttpStatus.CONFLICT;
+        var error = buildApiError(status.value(),
+                "This record has been updated by another user, please refresh the page and try again");
         return responseEntity(status, error);
     }
 

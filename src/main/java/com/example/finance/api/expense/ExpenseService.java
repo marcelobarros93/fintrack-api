@@ -30,7 +30,7 @@ public class ExpenseService {
         }
 
         var expenseSaved = findById(id);
-        BeanUtils.copyProperties(expense, expenseSaved, "id", "status");
+        BeanUtils.copyProperties(expense, expenseSaved, "id", "status", "version", "createdAt", "updatedAt");
         return expenseRepository.save(expenseSaved);
     }
 

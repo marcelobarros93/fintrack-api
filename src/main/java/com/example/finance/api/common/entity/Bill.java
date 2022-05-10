@@ -1,6 +1,7 @@
 package com.example.finance.api.common.entity;
 
 import com.example.finance.api.common.enums.StatusType;
+import com.example.finance.api.planning.Planning;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,6 +9,8 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
@@ -19,7 +22,7 @@ import java.time.LocalDate;
 @Setter
 @MappedSuperclass
 @NoArgsConstructor
-public abstract class Bill {
+public abstract class Bill extends AbstractEntity {
 
     @NotBlank
     private String description;
@@ -36,7 +39,12 @@ public abstract class Bill {
     @Column(name = "date_due")
     private LocalDate dateDue;
 
-    public Bill(String description, BigDecimal amount, StatusType status, LocalDate dateDue) {
+    @ManyToOne
+    @JoinColumn(name = "planning_id")
+    private Planning planning;
+
+    protected Bill(Long id, String description, BigDecimal amount, StatusType status, LocalDate dateDue) {
+        super(id);
         this.description = description;
         this.amount = amount;
         this.status = status;
