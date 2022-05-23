@@ -1,5 +1,7 @@
 package com.example.finance.api.income;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 
+@Tag(name = "Incomes", description = "Endpoints for managing incomes")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/v1/incomes")
@@ -25,6 +28,7 @@ public class IncomeResource {
     private final IncomeService incomeService;
     private final IncomeRepository incomeRepository;
 
+    @Operation(summary = "Find incomes by filter")
     @GetMapping
     public ResponseEntity<Page<IncomeResponse>> findByFilter(IncomeFilter filter, Pageable pageable) {
         Page<Income> page = incomeRepository.findByFilter(filter, pageable);
@@ -32,6 +36,7 @@ public class IncomeResource {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Create income")
     @PostMapping
     public ResponseEntity<IncomeResponse> create(@Valid @RequestBody IncomeRequest request) {
         var income = incomeService.create(toEntity(request));
@@ -45,6 +50,7 @@ public class IncomeResource {
         return ResponseEntity.created(location).body(toResponse(income));
     }
 
+    @Operation(summary = "Update income")
     @PutMapping("/{id}")
     public ResponseEntity<IncomeResponse> update(@PathVariable Long id,
                                                   @Valid @RequestBody IncomeRequest request) {
@@ -52,24 +58,28 @@ public class IncomeResource {
         return ResponseEntity.ok(toResponse(income));
     }
 
+    @Operation(summary = "Delete income by Id")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         incomeService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Get income by Id")
     @GetMapping("/{id}")
     public ResponseEntity<IncomeResponse> findById(@PathVariable Long id) {
         Income income = incomeService.findById(id);
         return ResponseEntity.ok(toResponse(income));
     }
 
+    @Operation(summary = "Receive income")
     @PutMapping("/{id}/receipt")
     public ResponseEntity<Void> receive(@PathVariable Long id) {
         incomeService.receive(id);
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Cancel receipt of income")
     @DeleteMapping("/{id}/receipt")
     public ResponseEntity<Void> cancelReceipt(@PathVariable Long id) {
         incomeService.cancelReceipt(id);

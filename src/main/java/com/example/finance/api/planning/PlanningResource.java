@@ -1,5 +1,7 @@
 package com.example.finance.api.planning;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,20 +20,23 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.time.YearMonth;
 
+@Tag(name = "Plannings", description = "Endpoints for managing plannings")
 @RestController
-@RequestMapping("/plannings")
+@RequestMapping("/v1/plannings")
 @RequiredArgsConstructor
 public class PlanningResource {
 
     private final PlanningRepository planningRepository;
     private final PlanningService planningService;
 
+    @Operation(summary = "Find plannings by filter")
     @GetMapping
     public ResponseEntity<Page<PlanningResponse>> findByFilter(PlanningFilter filter, Pageable pageable) {
         Page<PlanningResponse> response = planningRepository.findByFilter(filter, pageable).map(this::toResponse);
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Create planning")
     @PostMapping
     public ResponseEntity<PlanningResponse> create(@Valid @RequestBody PlanningRequest request) {
         var planning = planningService.create(toEntity(request));
@@ -45,18 +50,21 @@ public class PlanningResource {
         return ResponseEntity.created(location).body(toResponse(planning));
     }
 
+    @Operation(summary = "Activate planning")
     @PutMapping("/{id}/active")
     public ResponseEntity<Void> activate(@PathVariable Long id) {
         planningService.activateById(id);
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Inactivate planning")
     @PutMapping("/{id}/inactive")
     public ResponseEntity<Void> inactivate(@PathVariable Long id) {
         planningService.inactivateById(id);
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Update planning")
     @PutMapping("/{id}")
     public ResponseEntity<PlanningResponse> update(@PathVariable Long id,
                                                    @Valid @RequestBody PlanningRequest request) {
@@ -64,10 +72,18 @@ public class PlanningResource {
         return ResponseEntity.ok(toResponse(planning));
     }
 
+    @Operation(summary = "Delete planning by Id")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         planningService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Get planning by Id")
+    @GetMapping("/{id}")
+    public ResponseEntity<PlanningResponse> findById(@PathVariable Long id) {
+        Planning planning = planningService.findById(id);
+        return ResponseEntity.ok(toResponse(planning));
     }
 
     private Planning toEntity(PlanningRequest request) {

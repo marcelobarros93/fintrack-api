@@ -1,5 +1,7 @@
 package com.example.finance.api.expense;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 
+@Tag(name = "Expenses", description = "Endpoints for managing expenses")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/v1/expenses")
@@ -25,6 +28,7 @@ public class ExpenseResource {
     private final ExpenseService expenseService;
     private final ExpenseRepository expenseRepository;
 
+    @Operation(summary = "Find expenses by filter")
     @GetMapping
     public ResponseEntity<Page<ExpenseResponse>> findByFilter(ExpenseFilter filter, Pageable pageable) {
         Page<Expense> page = expenseRepository.findByFilter(filter, pageable);
@@ -32,6 +36,7 @@ public class ExpenseResource {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Create expense")
     @PostMapping
     public ResponseEntity<ExpenseResponse> create(@Valid @RequestBody ExpenseRequest request) {
         var expense = expenseService.create(toEntity(request));
@@ -45,6 +50,7 @@ public class ExpenseResource {
         return ResponseEntity.created(location).body(toResponse(expense));
     }
 
+    @Operation(summary = "Update expense")
     @PutMapping("/{id}")
     public ResponseEntity<ExpenseResponse> update(@PathVariable Long id,
                                                   @Valid @RequestBody ExpenseRequest request) {
@@ -52,24 +58,28 @@ public class ExpenseResource {
         return ResponseEntity.ok(toResponse(expense));
     }
 
+    @Operation(summary = "Delete expense by Id")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         expenseService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Get expense by Id")
     @GetMapping("/{id}")
     public ResponseEntity<ExpenseResponse> findById(@PathVariable Long id) {
         Expense expense = expenseService.findById(id);
         return ResponseEntity.ok(toResponse(expense));
     }
 
+    @Operation(summary = "Pay expense")
     @PutMapping("/{id}/payment")
     public ResponseEntity<Void> pay(@PathVariable Long id) {
         expenseService.pay(id);
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Cancel payment of expense")
     @DeleteMapping("/{id}/payment")
     public ResponseEntity<Void> cancelPayment(@PathVariable Long id) {
         expenseService.cancelPayment(id);

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.persistence.OptimisticLockException;
@@ -22,6 +23,7 @@ public class ApiExceptionHandler {
     private static final String GENERIC_ERROR_MESSAGE =
             "An unexpected internal system error has occurred";
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler
     public ResponseEntity<ApiError> handleEntityNotFoundException(EntityNotFoundException e) {
         var status = HttpStatus.NOT_FOUND;
@@ -29,6 +31,7 @@ public class ApiExceptionHandler {
         return responseEntity(status, error);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
     public ResponseEntity<ApiError> handleBusinessException(BusinessException e) {
         var status = HttpStatus.BAD_REQUEST;
@@ -36,6 +39,7 @@ public class ApiExceptionHandler {
         return responseEntity(status, error);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
     public ResponseEntity<ApiError> handleMethodArgumentNotValid(MethodArgumentNotValidException e) {
         var status = HttpStatus.BAD_REQUEST;
@@ -44,6 +48,7 @@ public class ApiExceptionHandler {
         return responseEntity(status, body);
     }
 
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler
     public ResponseEntity<ApiError> handleUncaught(Exception e) {
         log.error(e.getMessage(), e);
@@ -52,6 +57,7 @@ public class ApiExceptionHandler {
         return responseEntity(status, error);
     }
 
+    @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler
     public ResponseEntity<ApiError> handleOptimisticLockException(OptimisticLockException e) {
         log.error(e.getMessage(), e);
