@@ -2,6 +2,7 @@ package com.example.finance.api.planning;
 
 import com.example.finance.api.common.entity.AbstractEntity;
 import com.example.finance.api.common.enums.BillType;
+import com.example.finance.api.common.exception.BusinessException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -69,5 +70,38 @@ public class Planning extends AbstractEntity {
         this.active = active;
     }
 
-    
+    public void create() {
+        validatePlanningDates();
+        setActive(Boolean.TRUE);
+    }
+
+    private void validatePlanningDates() {
+        if(getStartAt().isAfter(getEndAt())) {
+            throw new BusinessException("The date start cannot be greater than the date end");
+        }
+
+        if(getEndAt().isBefore(LocalDate.now())) {
+            throw new BusinessException("The date end cannot be less than today");
+        }
+    }
+
+    public void update() {
+        validatePlanningDates();
+    }
+
+    public void activate() {
+        if(Boolean.TRUE.equals(getActive())) {
+            throw new BusinessException("This planning is not inactive");
+        }
+
+        setActive(Boolean.TRUE);
+    }
+
+    public void inactivate() {
+        if(Boolean.FALSE.equals(getActive())) {
+            throw new BusinessException("This planning is not active");
+        }
+
+        setActive(Boolean.FALSE);
+    }
 }

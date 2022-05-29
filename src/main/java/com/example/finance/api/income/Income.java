@@ -2,6 +2,7 @@ package com.example.finance.api.income;
 
 import com.example.finance.api.common.entity.Bill;
 import com.example.finance.api.common.enums.StatusType;
+import com.example.finance.api.common.exception.BusinessException;
 import com.example.finance.api.planning.Planning;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,5 +47,33 @@ public class Income extends Bill {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    public void update() {
+        if(isReceived() && getDateReceipt() == null) {
+            throw new BusinessException("Date received is required when income is received.");
+        }
+
+        if(!isReceived()) {
+            setDateReceipt(null);
+        }
+    }
+
+    public void receive() {
+        if(isReceived()) {
+            throw new BusinessException("This income has already been received");
+        }
+
+        setStatus(StatusType.RECEIVED);
+        setDateReceipt(LocalDateTime.now());
+    }
+
+    public void cancelReceipt() {
+        if(!isReceived()) {
+            throw new BusinessException("This income is not received");
+        }
+
+        setStatus(StatusType.OPEN);
+        setDateReceipt(null);
     }
 }

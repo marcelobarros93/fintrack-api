@@ -59,4 +59,8 @@ public abstract class Bill extends AbstractEntity {
     public boolean isReceived() {
         return StatusType.RECEIVED.equals(status);
     }
+
+    public void create() {
+        setStatus(StatusType.OPEN);
+    }
 }

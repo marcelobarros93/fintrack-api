@@ -2,6 +2,7 @@ package com.example.finance.api.expense;
 
 import com.example.finance.api.common.entity.Bill;
 import com.example.finance.api.common.enums.StatusType;
+import com.example.finance.api.common.exception.BusinessException;
 import com.example.finance.api.planning.Planning;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -49,4 +50,31 @@ public class Expense extends Bill {
         return getClass().hashCode();
     }
 
+    public void update() {
+        if(isPaid() && getDatePayment() == null) {
+            throw new BusinessException("Date payment is required when expense is paid.");
+        }
+
+        if(!isPaid()) {
+            setDatePayment(null);
+        }
+    }
+
+    public void pay() {
+        if(isPaid()) {
+            throw new BusinessException("This expense has already been paid");
+        }
+
+        setStatus(StatusType.PAID);
+        setDatePayment(LocalDateTime.now());
+    }
+
+    public void cancelPayment() {
+        if(!isPaid()) {
+            throw new BusinessException("This expense is not paid");
+        }
+
+        setStatus(StatusType.OPEN);
+        setDatePayment(null);
+    }
 }
