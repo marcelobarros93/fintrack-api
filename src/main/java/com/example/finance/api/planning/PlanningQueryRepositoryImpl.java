@@ -32,12 +32,12 @@ public class PlanningQueryRepositoryImpl implements PlanningQueryRepository {
         String sql = """
             select * from tb_planning p
             where p.active = true
-            and to_char(p.start_at, 'MM-YYYY') <= to_char(now(), 'MM-YYYY')
-            and to_char(p.end_at, 'MM-YYYY') >= to_char(now(), 'MM-YYYY')
+            and date_trunc('month', p.start_at) <= date_trunc('month', now())
+            and date_trunc('month', p.end_at) >= date_trunc('month', now())
             and p.id not in (select planning_id from tb_expense e where e.planning_id is not null
-                                and to_char(e.date_due , 'MM-YYYY') = to_char(now(), 'MM-YYYY'))
+                                and date_trunc('month', e.date_due) = date_trunc('month', now()))
             and p.id not in (select planning_id from tb_income i where i.planning_id is not null
-                                and to_char(i.date_due , 'MM-YYYY') = to_char(now(), 'MM-YYYY'));
+                                and date_trunc('month', i.date_due) = date_trunc('month', now()));
         """;
         Query query = entityManager.createNativeQuery(sql, Planning.class);
         return query.getResultList();
