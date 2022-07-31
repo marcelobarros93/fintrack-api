@@ -1,5 +1,6 @@
 package com.example.finance.api.expense;
 
+import com.example.finance.api.common.security.SecurityUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -27,11 +28,12 @@ public class ExpenseResource {
 
     private final ExpenseService expenseService;
     private final ExpenseRepository expenseRepository;
+    private final SecurityUtils securityUtils;
 
     @Operation(summary = "Find expenses by filter")
     @GetMapping
     public ResponseEntity<Page<ExpenseResponse>> findByFilter(ExpenseFilter filter, Pageable pageable) {
-        Page<Expense> page = expenseRepository.findByFilter(filter, pageable);
+        Page<Expense> page = expenseRepository.findByFilter(filter, pageable, securityUtils.getUserId());
         Page<ExpenseResponse> response = page.map(this::toResponse);
         return ResponseEntity.ok(response);
     }
@@ -39,7 +41,7 @@ public class ExpenseResource {
     @Operation(summary = "Create expense")
     @PostMapping
     public ResponseEntity<ExpenseResponse> create(@Valid @RequestBody ExpenseRequest request) {
-        var expense = expenseService.create(toEntity(request));
+        var expense = expenseService.create(toEntity(request), securityUtils.getUserId());
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequestUri()
@@ -54,35 +56,35 @@ public class ExpenseResource {
     @PutMapping("/{id}")
     public ResponseEntity<ExpenseResponse> update(@PathVariable Long id,
                                                   @Valid @RequestBody ExpenseRequest request) {
-        Expense expense = expenseService.update(id, toEntity(request));
+        Expense expense = expenseService.update(id, toEntity(request), securityUtils.getUserId());
         return ResponseEntity.ok(toResponse(expense));
     }
 
     @Operation(summary = "Delete expense by Id")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        expenseService.deleteById(id);
+        expenseService.deleteById(id, securityUtils.getUserId());
         return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Get expense by Id")
     @GetMapping("/{id}")
     public ResponseEntity<ExpenseResponse> findById(@PathVariable Long id) {
-        Expense expense = expenseService.findById(id);
+        Expense expense = expenseService.findByIdAndUser(id, securityUtils.getUserId());
         return ResponseEntity.ok(toResponse(expense));
     }
 
     @Operation(summary = "Pay expense")
     @PutMapping("/{id}/payment")
     public ResponseEntity<Void> pay(@PathVariable Long id) {
-        expenseService.pay(id);
+        expenseService.pay(id, securityUtils.getUserId());
         return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Cancel payment of expense")
     @DeleteMapping("/{id}/payment")
     public ResponseEntity<Void> cancelPayment(@PathVariable Long id) {
-        expenseService.cancelPayment(id);
+        expenseService.cancelPayment(id, securityUtils.getUserId());
         return ResponseEntity.noContent().build();
     }
 

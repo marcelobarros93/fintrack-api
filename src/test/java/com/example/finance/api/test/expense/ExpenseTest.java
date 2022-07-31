@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -16,6 +17,7 @@ class ExpenseTest {
 
     @Test
     void create_ShouldCreateOpenExpense_WhenCreate() {
+        var userId = UUID.randomUUID().toString();
         Expense expense = Expense.builder()
                 .id(1L)
                 .description(description())
@@ -24,7 +26,7 @@ class ExpenseTest {
                 .dateDue(LocalDate.now())
                 .build();
 
-        expense.create();
+        expense.create(userId);
 
         assertThat(expense.getStatus()).isEqualTo(StatusType.OPEN);
     }

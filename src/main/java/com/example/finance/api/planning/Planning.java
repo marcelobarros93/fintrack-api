@@ -57,6 +57,9 @@ public class Planning extends AbstractEntity {
     @NotNull
     private Boolean active;
 
+    @Column(name = "user_id", nullable = false)
+    private String userId;
+
     @Builder
     public Planning(Long id, String description, BigDecimal amount, Integer dueDay, BillType type,
                     LocalDate startAt, LocalDate endAt, Boolean active) {
@@ -70,9 +73,10 @@ public class Planning extends AbstractEntity {
         this.active = active;
     }
 
-    public void create() {
+    public void create(String userId) {
         validatePlanningDates();
         setActive(Boolean.TRUE);
+        setUserId(userId);
     }
 
     private void validatePlanningDates() {

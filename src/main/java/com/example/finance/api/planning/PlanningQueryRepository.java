@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface PlanningQueryRepository {
 
-    Page<Planning> findByFilter(PlanningFilter filter, Pageable pageable);
+    Page<Planning> findByFilter(PlanningFilter filter, Pageable pageable, String userId);
 
     List<Planning> findToCreateBill();
 }

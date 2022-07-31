@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -16,6 +17,7 @@ class IncomeTest {
 
     @Test
     void create_ShouldCreateOpenIncome_WhenValidParameters() {
+        var userId = UUID.randomUUID().toString();
         Income income = Income.builder()
                 .id(1L)
                 .description(description())
@@ -24,7 +26,7 @@ class IncomeTest {
                 .dateDue(LocalDate.now())
                 .build();
 
-        income.create();
+        income.create(userId);
 
         assertThat(income.getStatus()).isEqualTo(StatusType.OPEN);
     }

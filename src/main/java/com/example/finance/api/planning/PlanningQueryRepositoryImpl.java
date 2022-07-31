@@ -23,8 +23,8 @@ public class PlanningQueryRepositoryImpl implements PlanningQueryRepository {
     private EntityManager entityManager;
 
     @Override
-    public Page<Planning> findByFilter(PlanningFilter filter, Pageable pageable) {
-        return planningRepository.findAll(getSpecByFilter(filter), pageable);
+    public Page<Planning> findByFilter(PlanningFilter filter, Pageable pageable, String userId) {
+        return planningRepository.findAll(getSpecByFilter(filter, userId), pageable);
     }
 
     @Override
@@ -43,9 +43,11 @@ public class PlanningQueryRepositoryImpl implements PlanningQueryRepository {
         return query.getResultList();
     }
 
-    private Specification<Planning> getSpecByFilter(PlanningFilter filter) {
+    private Specification<Planning> getSpecByFilter(PlanningFilter filter, String userId) {
         return (planning, query, builder) -> {
             var predicates = new ArrayList<Predicate>();
+
+            predicates.add(builder.equal(planning.get("userId"), userId));
 
             if(filter.active() != null) {
                 predicates.add(builder.equal(planning.get("active"), filter.active()));

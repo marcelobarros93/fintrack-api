@@ -7,9 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -17,41 +15,41 @@ public class ExpenseService {
 
     private final ExpenseRepository expenseRepository;
 
-    public Expense create(Expense expense) {
-        expense.create();
+    public Expense create(Expense expense, String userId) {
+        expense.create(userId);
         return expenseRepository.save(expense);
     }
 
-    public Expense update(Long id, Expense expense) {
+    public Expense update(Long id, Expense expense, String userId) {
         expense.update();
-        var expenseSaved = findById(id);
-        BeanUtils.copyProperties(expense, expenseSaved, "id", "status", "version", "createdAt", "updatedAt");
+        var expenseSaved = findByIdAndUser(id, userId);
+        BeanUtils.copyProperties(expense, expenseSaved, "id", "userId", "status", "version", "createdAt", "updatedAt");
         return expenseRepository.save(expenseSaved);
     }
 
-    public Expense findById(Long id) {
-        return expenseRepository.findById(id)
+    public Expense findByIdAndUser(Long id, String userId) {
+        return expenseRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new ExpenseNotFoundException(id));
     }
 
-    public void pay(Long id) {
-        Expense expense = findById(id);
+    public void pay(Long id, String userId) {
+        Expense expense = findByIdAndUser(id, userId);
 
         expense.pay();
 
         expenseRepository.save(expense);
     }
 
-    public void cancelPayment(Long id) {
-        Expense expense = findById(id);
+    public void cancelPayment(Long id, String userId) {
+        Expense expense = findByIdAndUser(id, userId);
 
         expense.cancelPayment();
 
         expenseRepository.save(expense);
     }
 
-    public void deleteById(Long id) {
-        boolean exists = expenseRepository.existsById(id);
+    public void deleteById(Long id, String userId) {
+        boolean exists = expenseRepository.existsByIdAndUserId(id, userId);
 
         if(!exists) {
             throw new ExpenseNotFoundException(id);
@@ -70,8 +68,4 @@ public class ExpenseService {
                 .build();
     }
 
-    @Transactional
-    public void create(List<Expense> expenses) {
-        expenses.forEach(this::create);
-    }
 }

@@ -43,6 +43,9 @@ public abstract class Bill extends AbstractEntity {
     @JoinColumn(name = "planning_id")
     private Planning planning;
 
+    @Column(name = "user_id", nullable = false)
+    private String userId;
+
     protected Bill(Long id, String description, BigDecimal amount, StatusType status, LocalDate dateDue, Planning planning) {
         super(id);
         this.description = description;
@@ -60,7 +63,8 @@ public abstract class Bill extends AbstractEntity {
         return StatusType.RECEIVED.equals(status);
     }
 
-    public void create() {
+    public void create(String userId) {
         setStatus(StatusType.OPEN);
+        setUserId(userId);
     }
 }

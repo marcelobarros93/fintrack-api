@@ -5,5 +5,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface ExpenseQueryRepository {
 
-    public Page<Expense> findByFilter(ExpenseFilter filter, Pageable pageable);
+    public Page<Expense> findByFilter(ExpenseFilter filter, Pageable pageable, String userId);
 }

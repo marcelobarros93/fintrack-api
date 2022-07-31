@@ -1,9 +1,7 @@
 package com.example.finance.api.scheduler;
 
 import com.example.finance.api.common.enums.BillType;
-import com.example.finance.api.expense.Expense;
 import com.example.finance.api.expense.ExpenseService;
-import com.example.finance.api.income.Income;
 import com.example.finance.api.income.IncomeService;
 import com.example.finance.api.planning.Planning;
 import com.example.finance.api.planning.PlanningRepository;
@@ -16,13 +14,12 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class BillScheduler {
+public class CreateBillScheduler {
 
     private final PlanningRepository planningRepository;
     private final ExpenseService expenseService;
@@ -32,13 +29,11 @@ public class BillScheduler {
             fixedRateString = "${scheduler.create.bill.fixed-rate}",
             initialDelayString = "${scheduler.create.bill.initial-delay}")
     @Transactional
-    public void createByPlanning() {
+    public void execute() {
         log.info("Start job create bills {}", LocalDateTime.now());
 
         List<Planning> plannings = planningRepository.findToCreateBill();
 
-        List<Expense> expenses = new ArrayList<>();
-        List<Income> incomes = new ArrayList<>();
         LocalDate now = LocalDate.now();
         int year = now.getYear();
         Month month = now.getMonth();
@@ -48,27 +43,16 @@ public class BillScheduler {
             int dueDay = planning.getDueDay() > lastDayOfMonth ? lastDayOfMonth : planning.getDueDay();
 
             if(planning.getType().equals(BillType.EXPENSE)) {
-                Expense expense = expenseService.buildByPlanning(
+                var expense = expenseService.buildByPlanning(
                         planning, LocalDate.of(year, month, dueDay));
-                expenses.add(expense);
+                expenseService.create(expense, planning.getUserId());
             } else {
-                Income income = incomeService.buildByPlanning(
+                var income = incomeService.buildByPlanning(
                         planning, LocalDate.of(year, month, dueDay));
-                incomes.add(income);
+                incomeService.create(income, planning.getUserId());
             }
         });
 
-        if(!expenses.isEmpty()) {
-            expenseService.create(expenses);
-        }
-
-        if(!incomes.isEmpty()) {
-            incomeService.create(incomes);
-        }
-
-        log.info("Plannings {}", plannings.size());
-        log.info("Incomes {}", incomes.size());
-        log.info("Expenses {}", expenses.size());
         log.info("Finish job create bills {}", LocalDateTime.now());
     }
 }

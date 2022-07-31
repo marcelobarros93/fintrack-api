@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -15,6 +16,8 @@ class PlanningTest {
     
     @Test
     void create_ShouldCreatePlanning_WhenValidParameters() {
+        var userId = UUID.randomUUID().toString();
+
         var planning = Planning.builder()
                 .type(BillType.EXPENSE)
                 .startAt(LocalDate.now())
@@ -23,7 +26,7 @@ class PlanningTest {
                 .dueDay(4)
                 .build();
 
-        planning.create();
+        planning.create(userId);
 
         assertThat(planning.getStartAt()).isBefore(planning.getEndAt());
         assertThat(planning.getEndAt()).isAfter(LocalDate.now());
@@ -32,6 +35,8 @@ class PlanningTest {
 
     @Test
     void create_ShouldThrowsBusinessException_WhenEndAtIsBeforeToday() {
+        var userId = UUID.randomUUID().toString();
+
         var planning = Planning.builder()
                 .type(BillType.EXPENSE)
                 .startAt(LocalDate.now().minusDays(2))
@@ -40,11 +45,13 @@ class PlanningTest {
                 .dueDay(4)
                 .build();
 
-        assertThrows(BusinessException.class, planning::create);
+        assertThrows(BusinessException.class, () -> planning.create(userId));
     }
 
     @Test
     void create_ShouldThrowsBusinessException_WhenEndAtIsLessThanStartAt() {
+        var userId = UUID.randomUUID().toString();
+
         var planning = Planning.builder()
                 .type(BillType.EXPENSE)
                 .startAt(LocalDate.now().plusYears(1))
@@ -53,7 +60,7 @@ class PlanningTest {
                 .dueDay(4)
                 .build();
 
-        assertThrows(BusinessException.class, planning::create);
+        assertThrows(BusinessException.class, () ->  planning.create(userId));
     }
 
     @Test

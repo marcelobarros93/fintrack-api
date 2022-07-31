@@ -7,9 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -17,42 +15,42 @@ public class IncomeService {
 
     private final IncomeRepository incomeRepository;
 
-    public Income create(Income income) {
-        income.create();
+    public Income create(Income income, String userId) {
+        income.create(userId);
         return incomeRepository.save(income);
     }
 
-    public Income update(Long id, Income income) {
+    public Income update(Long id, Income income, String userId) {
         income.update();
 
-        var incomeSaved = findById(id);
+        var incomeSaved = findByIdAndUser(id, userId);
         BeanUtils.copyProperties(income, incomeSaved, "id", "status", "version", "createdAt", "updatedAt");
         return incomeRepository.save(incomeSaved);
     }
 
-    public Income findById(Long id) {
-        return incomeRepository.findById(id)
+    public Income findByIdAndUser(Long id, String userId) {
+        return incomeRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new IncomeNotFoundException(id));
     }
 
-    public void receive(Long id) {
-        Income income = findById(id);
+    public void receive(Long id, String userId) {
+        Income income = findByIdAndUser(id, userId);
 
         income.receive();
 
         incomeRepository.save(income);
     }
 
-    public void cancelReceipt(Long id) {
-        Income income = findById(id);
+    public void cancelReceipt(Long id, String userId) {
+        Income income = findByIdAndUser(id, userId);
 
         income.cancelReceipt();
 
         incomeRepository.save(income);
     }
 
-    public void deleteById(Long id) {
-        boolean exists = incomeRepository.existsById(id);
+    public void deleteById(Long id, String userId) {
+        boolean exists = incomeRepository.existsByIdAndUserId(id, userId);
 
         if(!exists) {
             throw new IncomeNotFoundException(id);
@@ -71,8 +69,4 @@ public class IncomeService {
                 .build();
     }
 
-    @Transactional
-    public void create(List<Income> incomes) {
-        incomes.forEach(this::create);
-    }
 }

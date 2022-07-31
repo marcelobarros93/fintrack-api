@@ -18,13 +18,15 @@ public class ExpenseQueryRepositoryImpl implements ExpenseQueryRepository {
     private ExpenseRepository expenseRepository;
 
     @Override
-    public Page<Expense> findByFilter(ExpenseFilter filter, Pageable pageable) {
-        return expenseRepository.findAll(getSpecByFilter(filter), pageable);
+    public Page<Expense> findByFilter(ExpenseFilter filter, Pageable pageable, String userId) {
+        return expenseRepository.findAll(getSpecByFilter(filter, userId), pageable);
     }
 
-    private Specification<Expense> getSpecByFilter(ExpenseFilter filter) {
+    private Specification<Expense> getSpecByFilter(ExpenseFilter filter, String userId) {
         return (expense, query, builder) -> {
             var predicates = new ArrayList<Predicate>();
+
+            predicates.add(builder.equal(expense.get("userId"), userId));
 
             if(filter.status() != null) {
                 predicates.add(builder.equal(expense.get("status"), filter.status()));
