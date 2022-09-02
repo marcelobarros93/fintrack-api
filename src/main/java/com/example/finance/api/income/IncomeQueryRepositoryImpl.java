@@ -18,13 +18,15 @@ public class IncomeQueryRepositoryImpl implements IncomeQueryRepository {
     private IncomeRepository incomeRepository;
 
     @Override
-    public Page<Income> findByFilter(IncomeFilter filter, Pageable pageable) {
-        return incomeRepository.findAll(getSpecByFilter(filter), pageable);
+    public Page<Income> findByFilter(IncomeFilter filter, Pageable pageable, String userId) {
+        return incomeRepository.findAll(getSpecByFilter(filter, userId), pageable);
     }
 
-    private Specification<Income> getSpecByFilter(IncomeFilter filter) {
+    private Specification<Income> getSpecByFilter(IncomeFilter filter, String userId) {
         return (income, query, builder) -> {
             var predicates = new ArrayList<Predicate>();
+
+            predicates.add(builder.equal(income.get("userId"), userId));
 
             if(filter.status() != null) {
                 predicates.add(builder.equal(income.get("status"), filter.status()));

@@ -33,7 +33,7 @@ public class IncomeResource {
     @Operation(summary = "Find incomes by filter")
     @GetMapping
     public ResponseEntity<Page<IncomeResponse>> findByFilter(IncomeFilter filter, Pageable pageable) {
-        Page<Income> page = incomeRepository.findByFilter(filter, pageable);
+        Page<Income> page = incomeRepository.findByFilter(filter, pageable, securityUtils.getUserId());
         Page<IncomeResponse> response = page.map(this::toResponse);
         return ResponseEntity.ok(response);
     }

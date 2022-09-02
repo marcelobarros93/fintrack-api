@@ -5,5 +5,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface IncomeQueryRepository {
 
-    public Page<Income> findByFilter(IncomeFilter filter, Pageable pageable);
+    public Page<Income> findByFilter(IncomeFilter filter, Pageable pageable, String userId);
 }
