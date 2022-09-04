@@ -15,7 +15,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 
@@ -27,10 +27,10 @@ import java.util.Objects;
 public class Income extends Bill {
 
     @Column(name = "date_receipt")
-    private LocalDateTime dateReceipt;
+    private OffsetDateTime dateReceipt;
 
     @Builder
-    public Income(Long id, LocalDateTime dateReceipt, String description, BigDecimal amount,
+    public Income(Long id, OffsetDateTime dateReceipt, String description, BigDecimal amount,
                   StatusType status, LocalDate dateDue, Planning planning) {
         super(id, description, amount, status, dateDue, planning);
         this.dateReceipt = dateReceipt;
@@ -65,7 +65,7 @@ public class Income extends Bill {
         }
 
         setStatus(StatusType.RECEIVED);
-        setDateReceipt(LocalDateTime.now());
+        setDateReceipt(OffsetDateTime.now());
     }
 
     public void cancelReceipt() {

@@ -24,7 +24,7 @@ public class IncomeService {
         income.update();
 
         var incomeSaved = findByIdAndUser(id, userId);
-        BeanUtils.copyProperties(income, incomeSaved, "id", "status", "version", "createdAt", "updatedAt");
+        BeanUtils.copyProperties(income, incomeSaved, "id", "userId", "version", "createdAt", "updatedAt");
         return incomeRepository.save(incomeSaved);
     }
 

@@ -94,6 +94,7 @@ public class IncomeResource {
                 .amount(request.amount())
                 .dateDue(request.dateDue())
                 .dateReceipt(request.dateReceipt())
+                .status(request.status())
                 .build();
     }
 
