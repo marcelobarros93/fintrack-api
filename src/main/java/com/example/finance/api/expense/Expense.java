@@ -16,7 +16,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 @NoArgsConstructor
@@ -28,11 +28,11 @@ import java.util.Objects;
 public class Expense extends Bill {
 
     @Column(name = "date_payment")
-    private LocalDateTime datePayment;
+    private OffsetDateTime datePayment;
 
     @Builder
     public Expense(Long id, String description, BigDecimal amount, StatusType status,
-                   LocalDate dateDue, LocalDateTime datePayment, Planning planning) {
+                   LocalDate dateDue, OffsetDateTime datePayment, Planning planning) {
         super(id, description, amount, status, dateDue, planning);
         this.datePayment = datePayment;
     }
@@ -66,7 +66,7 @@ public class Expense extends Bill {
         }
 
         setStatus(StatusType.PAID);
-        setDatePayment(LocalDateTime.now());
+        setDatePayment(OffsetDateTime.now());
     }
 
     public void cancelPayment() {

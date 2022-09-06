@@ -1,11 +1,13 @@
 package com.example.finance.api.expense;
 
+import com.example.finance.api.common.enums.StatusType;
+
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 public record ExpenseRequest(
         @NotBlank(message = "Description is required")
@@ -18,5 +20,8 @@ public record ExpenseRequest(
         @NotNull(message = "Date due is required")
         LocalDate dateDue,
 
-        LocalDateTime datePayment
+        OffsetDateTime datePayment,
+
+        @NotNull(message = "Status is required")
+        StatusType status
 ) { }

@@ -94,6 +94,7 @@ public class ExpenseResource {
                 .amount(request.amount())
                 .dateDue(request.dateDue())
                 .datePayment(request.datePayment())
+                .status(request.status())
                 .build();
     }
 
