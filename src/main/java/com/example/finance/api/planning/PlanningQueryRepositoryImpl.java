@@ -10,11 +10,15 @@ import org.springframework.data.jpa.domain.Specification;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlanningQueryRepositoryImpl implements PlanningQueryRepository {
+
+    public static final String DATE_TRUNC_MONTH = "date_trunc_month";
 
     @Autowired @Lazy
     private PlanningRepository planningRepository;
@@ -68,19 +72,23 @@ public class PlanningQueryRepositoryImpl implements PlanningQueryRepository {
             }
 
             if(filter.startAtStart() != null) {
-                predicates.add(builder.greaterThanOrEqualTo(planning.get("startAt"), filter.startAtStart()));
+                Expression<LocalDate> function = builder.function(DATE_TRUNC_MONTH, LocalDate.class, planning.get("startAt"));
+                predicates.add(builder.greaterThanOrEqualTo(function, filter.startAtStart().atDay(1)));
             }
 
             if(filter.startAtEnd() != null) {
-                predicates.add(builder.lessThanOrEqualTo(planning.get("startAt"), filter.startAtEnd()));
+                Expression<LocalDate> function = builder.function(DATE_TRUNC_MONTH, LocalDate.class, planning.get("startAt"));
+                predicates.add(builder.lessThanOrEqualTo(function, filter.startAtEnd().atDay(1)));
             }
 
             if(filter.endAtStart() != null) {
-                predicates.add(builder.greaterThanOrEqualTo(planning.get("endAt"), filter.endAtStart()));
+                Expression<LocalDate> function = builder.function(DATE_TRUNC_MONTH, LocalDate.class, planning.get("endAt"));
+                predicates.add(builder.greaterThanOrEqualTo(function, filter.endAtStart().atDay(1)));
             }
 
             if(filter.endAtEnd() != null) {
-                predicates.add(builder.lessThanOrEqualTo(planning.get("endAt"), filter.endAtEnd()));
+                Expression<LocalDate> function = builder.function(DATE_TRUNC_MONTH, LocalDate.class, planning.get("endAt"));
+                predicates.add(builder.lessThanOrEqualTo(function, filter.endAtEnd().atDay(1)));
             }
 
             return builder.and(predicates.toArray(Predicate[]::new));
