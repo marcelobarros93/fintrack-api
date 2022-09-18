@@ -31,5 +31,8 @@ public record PlanningRequest(
         YearMonth startAt,
 
         @NotNull(message = "Date end is required")
-        YearMonth endAt
+        YearMonth endAt,
+
+        @NotNull(message = "Active is required")
+        Boolean active
 ) { }

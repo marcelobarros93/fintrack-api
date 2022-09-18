@@ -20,7 +20,7 @@ public class PlanningService {
         planning.update();
         var planningSaved = findByIdAndUser(id, userId);
         BeanUtils.copyProperties(planning, planningSaved,
-                "active", "id", "version", "createdAt", "updatedAt");
+                "id", "userId", "version", "createdAt", "updatedAt");
         return planningRepository.save(planningSaved);
     }
 

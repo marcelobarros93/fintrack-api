@@ -98,6 +98,7 @@ public class PlanningResource {
                 .startAt(request.startAt().atDay(request.dueDay()))
                 .endAt(request.endAt().atDay(request.dueDay()))
                 .type(request.type())
+                .active(request.active())
                 .build();
     }
 
