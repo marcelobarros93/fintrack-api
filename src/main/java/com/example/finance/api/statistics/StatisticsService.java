@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.YearMonth;
 
@@ -72,6 +73,9 @@ public class StatisticsService {
             return BigDecimal.ZERO;
         }
 
-        return v2.subtract(v1).divide(v1, RoundingMode.HALF_UP).multiply(HUNDRED);
+        return v2.subtract(v1)
+                .divide(v1, MathContext.DECIMAL64)
+                .multiply(HUNDRED)
+                .setScale(3, RoundingMode.HALF_UP);
     }
 }
