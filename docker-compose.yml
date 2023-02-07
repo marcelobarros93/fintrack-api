@@ -28,3 +28,14 @@ services:
       - start-dev
     depends_on:
       - postgres
+
+  nginx:
+    image: nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./.nginx:/etc/nginx
+      - ./.cert:/cert
+

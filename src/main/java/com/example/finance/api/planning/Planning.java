@@ -83,10 +83,6 @@ public class Planning extends AbstractEntity {
         if(getStartAt().isAfter(getEndAt())) {
             throw new BusinessException("The date start cannot be greater than the date end");
         }
-
-        if(getEndAt().isBefore(LocalDate.now())) {
-            throw new BusinessException("The date end cannot be less than today");
-        }
     }
 
     public void update() {

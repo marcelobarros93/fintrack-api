@@ -34,21 +34,6 @@ class PlanningTest {
     }
 
     @Test
-    void create_ShouldThrowsBusinessException_WhenEndAtIsBeforeToday() {
-        var userId = UUID.randomUUID().toString();
-
-        var planning = Planning.builder()
-                .type(BillType.EXPENSE)
-                .startAt(LocalDate.now().minusDays(2))
-                .endAt(LocalDate.now().minusDays(1))
-                .amount(BigDecimal.TEN)
-                .dueDay(4)
-                .build();
-
-        assertThrows(BusinessException.class, () -> planning.create(userId));
-    }
-
-    @Test
     void create_ShouldThrowsBusinessException_WhenEndAtIsLessThanStartAt() {
         var userId = UUID.randomUUID().toString();
 
