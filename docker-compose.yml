@@ -28,13 +28,3 @@ services:
       - start-dev
     depends_on:
       - postgres
-
-  jenkins:
-    image: jenkins
-    build:
-      context: jenkins
-      dockerfile: Dockerfile
-    ports:
-      - 8082:8080
-    volumes:
-      - ./.jenkins/jenkins_home:/var/jenkins_home
