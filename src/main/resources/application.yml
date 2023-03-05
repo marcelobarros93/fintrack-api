@@ -4,7 +4,7 @@ spring:
     username: postgres
     password: postgres
   jpa:
-    show-sql: true
+    show-sql: false
   mvc:
     format:
       date: iso
@@ -27,3 +27,14 @@ springdoc:
     path: /api-docs
   swagger-ui:
     operationsSorter: method
+
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true

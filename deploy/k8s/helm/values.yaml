@@ -1,0 +1,80 @@
+name: finance-api
+
+namespace: applications
+
+replicaCount: 2
+
+image:
+  repository: "marcelobarros09/finance-api"
+  pullPolicy: Always
+  tag: "latest"
+
+imagePullSecrets:
+  - name: dockerhub
+
+configMapEnv:
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://192.168.10.8:5432/finance"
+  SPRING_DATASOURCE_USERNAME: "postgres"
+  SPRING_DATASOURCE_PASSWORD: "postgres"
+  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI: "http://192.168.10.8:8081/realms/Finance/protocol/openid-connect/certs"
+
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+  protocol: TCP
+
+resources:
+  requests: 
+    cpu: 300m
+    memory: 768Mi
+  limits:
+    cpu: 450m
+    memory: 768Mi
+
+dockerRegistrySecret:
+  name: dockerhub
+  dockerconfigjson:
+
+ingress:
+  public:
+    enabled: "false"
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
+    hosts:
+      - host: fincelo.marcelobarros.dev.br
+        paths:
+          - path: /
+            pathType: Prefix
+  private:
+    enabled: "false"
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
+    hosts:
+      - host: fincelo.marcelobarros.net.br
+        paths:
+          - path: /
+            pathType: Prefix
+
+startupProbe:
+  httpGet:
+    path: /actuator/health
+    port: 8080
+  initialDelaySeconds: 25
+  periodSeconds: 5
+  failureThreshold: 30
+
+livenessProbe:
+  httpGet:
+    path: /actuator/health/liveness
+    port: 8080
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /actuator/health/readiness
+    port: 8080
+  periodSeconds: 30
+  timeoutSeconds: 5

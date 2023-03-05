@@ -18,7 +18,10 @@
 	<properties>
 		<java.version>17</java.version>
 		<springdoc-openapi-ui.version>1.6.8</springdoc-openapi-ui.version>
-	</properties>
+        <jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
+        <docker.registry>marcelobarros09</docker.registry>
+        <jib.image.from>amazoncorretto:17-alpine3.17</jib.image.from>
+    </properties>
 
 	<dependencies>
 
@@ -108,6 +111,23 @@
 					</excludes>
 				</configuration>
 			</plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>${jib-maven-plugin.version}</version>
+                <configuration>
+                    <from>
+                        <image>${jib.image.from}</image>
+                    </from>
+                    <to>
+                        <image>${docker.registry}/${project.artifactId}</image>
+                        <tags>
+                            <tag>${project.version}</tag>
+                            <tag>latest</tag>
+                        </tags>
+                    </to>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 
