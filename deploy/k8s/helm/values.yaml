@@ -13,10 +13,10 @@ imagePullSecrets:
   - name: dockerhub
 
 configMapEnv:
-  SPRING_DATASOURCE_URL: "jdbc:postgresql://192.168.10.8:5432/finance"
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://192.168.10.7:5432/finance"
   SPRING_DATASOURCE_USERNAME: "postgres"
   SPRING_DATASOURCE_PASSWORD: "postgres"
-  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI: "http://192.168.10.8:8081/realms/Finance/protocol/openid-connect/certs"
+  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI: "http://192.168.10.7:8081/realms/Finance/protocol/openid-connect/certs"
 
 service:
   type: ClusterIP
