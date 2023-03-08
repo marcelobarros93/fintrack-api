@@ -42,7 +42,7 @@ ingress:
     annotations:
       kubernetes.io/ingress.class: "nginx"
     hosts:
-      - host: fincelo.marcelobarros.dev.br
+      - host: fintrack.marcelobarros.dev.br
         paths:
           - path: /
             pathType: Prefix
@@ -51,7 +51,7 @@ ingress:
     annotations:
       kubernetes.io/ingress.class: "nginx"
     hosts:
-      - host: fincelo.marcelobarros.net.br
+      - host: fintrack.marcelobarros.net.br
         paths:
           - path: /
             pathType: Prefix
