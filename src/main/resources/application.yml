@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/finance
+    url: jdbc:postgresql://localhost:5432/fintrack
     username: postgres
     password: postgres
   jpa:

@@ -1,2 +1,2 @@
-create database finance;
+create database fintrack;
 create database keycloak;

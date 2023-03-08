@@ -1,11 +1,11 @@
-name: finance-api
+name: fintrack-api
 
 namespace: applications
 
 replicaCount: 2
 
 image:
-  repository: "marcelobarros09/finance-api"
+  repository: "marcelobarros09/fintrack-api"
   pullPolicy: Always
   tag: "latest"
 
@@ -13,7 +13,7 @@ imagePullSecrets:
   - name: dockerhub
 
 configMapEnv:
-  SPRING_DATASOURCE_URL: "jdbc:postgresql://192.168.10.7:5432/finance"
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://192.168.10.7:5432/fintrack"
   SPRING_DATASOURCE_USERNAME: "postgres"
   SPRING_DATASOURCE_PASSWORD: "postgres"
   SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI: "http://192.168.10.7:8081/realms/Finance/protocol/openid-connect/certs"

@@ -1,4 +1,4 @@
-name: Finance API - CI
+name: CI
 
 on:
   push:
