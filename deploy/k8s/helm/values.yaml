@@ -29,7 +29,7 @@ resources:
     cpu: 300m
     memory: 768Mi
   limits:
-    cpu: 450m
+    cpu: 900m
     memory: 768Mi
 
 dockerRegistrySecret:
