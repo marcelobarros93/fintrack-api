@@ -47,7 +47,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'fintrackapi'
+          app-name: 'fintrack-app'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_05B96A63863B4A87A2C62CB99DF750E0 }}
           package: '*.jar'
