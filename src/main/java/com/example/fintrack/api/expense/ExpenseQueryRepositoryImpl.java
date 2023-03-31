@@ -4,7 +4,6 @@ import com.example.fintrack.api.common.dto.MonthlyTotalDTO;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -22,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExpenseQueryRepositoryImpl implements ExpenseQueryRepository {
 
+    public static final String USER_ID_PARAM = "userId";
     @Autowired
     @Lazy
     private ExpenseRepository expenseRepository;
@@ -46,9 +46,9 @@ public class ExpenseQueryRepositoryImpl implements ExpenseQueryRepository {
             order by to_char(e.date_due, 'yyyy-mm') asc;
         """;
 
-        Query query = entityManager.unwrap(Session.class).createSQLQuery(sql);
+        var query = entityManager.unwrap(Session.class).createNativeQuery(sql);
         query.setParameter("givenMonth", month.atDay(1));
-        query.setParameter("userId", userId);
+        query.setParameter(USER_ID_PARAM, userId);
         query.setResultTransformer(Transformers.aliasToBean(MonthlyTotalDTO.class));
         return query.getResultList();
     }
@@ -65,10 +65,10 @@ public class ExpenseQueryRepositoryImpl implements ExpenseQueryRepository {
             order by to_char(e.date_due, 'yyyy-mm') asc;
         """;
 
-        Query query = entityManager.unwrap(Session.class).createSQLQuery(sql);
+        var query = entityManager.unwrap(Session.class).createNativeQuery(sql);
         query.setParameter("start", start.atDay(1));
         query.setParameter("end", end.atDay(1));
-        query.setParameter("userId", userId);
+        query.setParameter(USER_ID_PARAM, userId);
         query.setResultTransformer(Transformers.aliasToBean(MonthlyTotalDTO.class));
         return query.getResultList();
     }
@@ -77,7 +77,7 @@ public class ExpenseQueryRepositoryImpl implements ExpenseQueryRepository {
         return (expense, query, builder) -> {
             var predicates = new ArrayList<Predicate>();
 
-            predicates.add(builder.equal(expense.get("userId"), userId));
+            predicates.add(builder.equal(expense.get(USER_ID_PARAM), userId));
 
             if (filter.status() != null) {
                 predicates.add(builder.equal(expense.get("status"), filter.status()));

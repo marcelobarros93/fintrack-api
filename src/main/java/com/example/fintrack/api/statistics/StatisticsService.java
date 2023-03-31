@@ -69,7 +69,7 @@ public class StatisticsService {
     }
 
     private BigDecimal percentageDifference(BigDecimal v1, BigDecimal v2) {
-        if (v1 == null || v1.equals(BigDecimal.ZERO) || v2 == null || v2.equals(BigDecimal.ZERO)) {
+        if (v1.equals(BigDecimal.ZERO) || v2.equals(BigDecimal.ZERO)) {
             return BigDecimal.ZERO;
         }
 
