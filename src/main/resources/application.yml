@@ -38,3 +38,9 @@ management:
       enabled: true
     readinessstate:
       enabled: true
+
+security:
+  cors:
+    allowedOrigins: http://localhost:4200
+    allowedMethods: GET,POST,PUT,DELETE
+    allowedHeaders: "*"

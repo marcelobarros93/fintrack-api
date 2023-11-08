@@ -12,9 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.Predicate;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.Predicate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,7 @@ public class IncomeQueryRepositoryImpl implements IncomeQueryRepository {
             order by to_char(e.date_due, 'yyyy-mm') asc;
         """;
 
-        Query query = entityManager.unwrap(Session.class).createSQLQuery(sql);
+        Query query = entityManager.unwrap(Session.class).createNativeQuery(sql);
         query.setParameter("givenMonth", month.atDay(1));
         query.setParameter("userId", userId);
         query.setResultTransformer(Transformers.aliasToBean(MonthlyTotalDTO.class));
@@ -64,7 +64,7 @@ public class IncomeQueryRepositoryImpl implements IncomeQueryRepository {
             order by to_char(e.date_due, 'yyyy-mm') asc;
         """;
 
-        Query query = entityManager.unwrap(Session.class).createSQLQuery(sql);
+        Query query = entityManager.unwrap(Session.class).createNativeQuery(sql);
         query.setParameter("start", start.atDay(1));
         query.setParameter("end", end.atDay(1));
         query.setParameter("userId", userId);
