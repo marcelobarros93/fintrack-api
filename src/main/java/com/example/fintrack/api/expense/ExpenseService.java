@@ -21,8 +21,9 @@ public class ExpenseService {
     }
 
     public Expense update(Long id, Expense expense, String userId) {
-        expense.update();
         var expenseSaved = findByIdAndUser(id, userId);
+        expense.setStatus(expenseSaved.getStatus());
+        expense.update();
         BeanUtils.copyProperties(expense, expenseSaved, "id", "userId", "planning", "status", "version", "createdAt", "updatedAt");
         return expenseRepository.save(expenseSaved);
     }

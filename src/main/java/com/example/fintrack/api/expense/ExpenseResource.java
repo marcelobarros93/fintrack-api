@@ -40,8 +40,8 @@ public class ExpenseResource {
 
     @Operation(summary = "Create expense")
     @PostMapping
-    public ResponseEntity<ExpenseResponse> create(@Valid @RequestBody ExpenseRequest request) {
-        var expense = expenseService.create(toEntity(request), securityUtils.getUserId());
+    public ResponseEntity<ExpenseResponse> create(@Valid @RequestBody ExpenseCreateRequest request) {
+        var expense = expenseService.create(request.toEntity(), securityUtils.getUserId());
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequestUri()
@@ -55,8 +55,8 @@ public class ExpenseResource {
     @Operation(summary = "Update expense")
     @PutMapping("/{id}")
     public ResponseEntity<ExpenseResponse> update(@PathVariable Long id,
-                                                  @Valid @RequestBody ExpenseRequest request) {
-        Expense expense = expenseService.update(id, toEntity(request), securityUtils.getUserId());
+                                                  @Valid @RequestBody ExpenseUpdateRequest request) {
+        Expense expense = expenseService.update(id, request.toEntity(), securityUtils.getUserId());
         return ResponseEntity.ok(toResponse(expense));
     }
 
@@ -86,16 +86,6 @@ public class ExpenseResource {
     public ResponseEntity<Void> cancelPayment(@PathVariable Long id) {
         expenseService.cancelPayment(id, securityUtils.getUserId());
         return ResponseEntity.noContent().build();
-    }
-
-    private Expense toEntity(ExpenseRequest request) {
-        return Expense.builder()
-                .description(request.description())
-                .amount(request.amount())
-                .dateDue(request.dateDue())
-                .datePayment(request.datePayment())
-                .status(request.status())
-                .build();
     }
 
     public ExpenseResponse toResponse(Expense expense) {

@@ -1,15 +1,13 @@
 package com.example.fintrack.api.expense;
 
-import com.example.fintrack.api.common.enums.StatusType;
-
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
 
-public record ExpenseRequest(
+public record ExpenseCreateRequest(
         @NotBlank(message = "Description is required")
         String description,
 
@@ -18,10 +16,14 @@ public record ExpenseRequest(
         BigDecimal amount,
 
         @NotNull(message = "Date due is required")
-        LocalDate dateDue,
+        LocalDate dateDue
 
-        OffsetDateTime datePayment,
-
-        @NotNull(message = "Status is required")
-        StatusType status
-) { }
+) {
+        public Expense toEntity() {
+                return Expense.builder()
+                        .description(description)
+                        .amount(amount)
+                        .dateDue(dateDue)
+                        .build();
+        }
+}
