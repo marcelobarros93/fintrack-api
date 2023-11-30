@@ -20,7 +20,7 @@
 		<springdoc-openapi-ui.version>1.6.8</springdoc-openapi-ui.version>
         <jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
         <docker.registry>marcelobarros09</docker.registry>
-        <jib.image.from>amazoncorretto:17-alpine3.17</jib.image.from>
+        <jib.image.from>amazoncorretto:21-alpine3.18</jib.image.from>
     </properties>
 
 	<dependencies>
