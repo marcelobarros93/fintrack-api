@@ -1,5 +1,6 @@
 package com.example.fintrack.api.common.exception.handler;
 
+import com.example.fintrack.api.common.exception.AuthenticationException;
 import com.example.fintrack.api.common.exception.BusinessException;
 import com.example.fintrack.api.common.exception.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -64,6 +65,14 @@ public class ApiExceptionHandler {
         HttpStatus status = HttpStatus.CONFLICT;
         var error = buildApiError(status.value(),
                 "This record has been updated by another user, please refresh the page and try again");
+        return responseEntity(status, error);
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler
+    public ResponseEntity<ApiError> handleAuthenticationException(AuthenticationException e) {
+        var status = HttpStatus.UNAUTHORIZED;
+        var error = buildApiError(status.value(), e.getMessage());
         return responseEntity(status, error);
     }
 

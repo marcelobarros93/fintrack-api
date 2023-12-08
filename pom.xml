@@ -17,11 +17,12 @@
 
 	<properties>
 		<java.version>20</java.version>
-		<springdoc-openapi-ui.version>1.6.8</springdoc-openapi-ui.version>
         <jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
         <docker.registry>marcelobarros09</docker.registry>
         <jib.image.from>amazoncorretto:21-alpine3.18</jib.image.from>
-    </properties>
+		<java-jwt.version>4.4.0</java-jwt.version>
+		<springdoc-openapi-starter-webmvc-ui.version>2.2.0</springdoc-openapi-starter-webmvc-ui.version>
+	</properties>
 
 	<dependencies>
 
@@ -79,8 +80,14 @@
 
 		<dependency>
 			<groupId>org.springdoc</groupId>
-			<artifactId>springdoc-openapi-ui</artifactId>
-			<version>${springdoc-openapi-ui.version}</version>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>${springdoc-openapi-starter-webmvc-ui.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>${java-jwt.version}</version>
 		</dependency>
 
 		<dependency>
