@@ -36,5 +36,6 @@ public record PlanningRequest(
         @NotNull(message = "Active is required")
         Boolean active,
 
-        boolean showInstallmentsInBillName
+        @NotNull(message = "Show installments in bill name is required")
+        Boolean showInstallmentsInBillName
 ) { }
