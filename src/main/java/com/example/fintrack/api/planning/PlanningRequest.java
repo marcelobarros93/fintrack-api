@@ -34,5 +34,7 @@ public record PlanningRequest(
         YearMonth endAt,
 
         @NotNull(message = "Active is required")
-        Boolean active
+        Boolean active,
+
+        boolean showInstallmentsInBillName
 ) { }

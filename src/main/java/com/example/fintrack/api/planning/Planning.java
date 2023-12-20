@@ -21,6 +21,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -60,9 +61,12 @@ public class Planning extends AbstractEntity {
     @Column(name = "user_id", nullable = false)
     private String userId;
 
+    @Column(name = "show_installments_bill_name")
+    private Boolean showInstallmentsInBillName;
+
     @Builder
     public Planning(Long id, String description, BigDecimal amount, Integer dueDay, BillType type,
-                    LocalDate startAt, LocalDate endAt, Boolean active) {
+                    LocalDate startAt, LocalDate endAt, Boolean active, Boolean showInstallmentsInBillName) {
         super(id);
         this.description = description;
         this.amount = amount;
@@ -71,6 +75,7 @@ public class Planning extends AbstractEntity {
         this.startAt = startAt;
         this.endAt = endAt;
         this.active = active;
+        this.showInstallmentsInBillName = showInstallmentsInBillName;
     }
 
     public void create(String userId) {
@@ -103,5 +108,16 @@ public class Planning extends AbstractEntity {
         }
 
         setActive(Boolean.FALSE);
+    }
+
+    public String getBillName() {
+        if(Boolean.TRUE.equals(showInstallmentsInBillName)) {
+            var totalInstallments = ChronoUnit.MONTHS.between(startAt, endAt) + 1;
+            var currentInstallment = ChronoUnit.MONTHS.between(startAt, LocalDate.now()) + 1;
+            var counter = currentInstallment + "/" + totalInstallments;
+            return description + " " + counter;
+        } else {
+            return description;
+        }
     }
 }

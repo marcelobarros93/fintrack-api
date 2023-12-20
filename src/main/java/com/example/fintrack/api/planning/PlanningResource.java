@@ -99,6 +99,7 @@ public class PlanningResource {
                 .endAt(request.endAt().atDay(request.dueDay()))
                 .type(request.type())
                 .active(request.active())
+                .showInstallmentsInBillName(request.showInstallmentsInBillName())
                 .build();
     }
 
@@ -111,6 +112,7 @@ public class PlanningResource {
                 planning.getActive(),
                 planning.getAmount(),
                 YearMonth.from(planning.getStartAt()),
-                YearMonth.from(planning.getEndAt()));
+                YearMonth.from(planning.getEndAt()),
+                planning.getShowInstallmentsInBillName());
     }
 }

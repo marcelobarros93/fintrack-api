@@ -63,7 +63,7 @@ public class IncomeService {
         return Income.builder()
                 .status(StatusType.OPEN)
                 .dateDue(dateDue)
-                .description(planning.getDescription())
+                .description(planning.getBillName())
                 .amount(planning.getAmount())
                 .planning(planning)
                 .build();

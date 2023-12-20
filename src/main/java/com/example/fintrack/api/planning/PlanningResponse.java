@@ -13,5 +13,6 @@ public record PlanningResponse(
         Boolean active,
         BigDecimal amount,
         YearMonth startAt,
-        YearMonth endAt
+        YearMonth endAt,
+        Boolean showInstallmentsInBillName
 ) { }

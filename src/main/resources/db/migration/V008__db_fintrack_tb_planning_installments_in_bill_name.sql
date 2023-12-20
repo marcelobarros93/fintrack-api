@@ -1,0 +1,1 @@
+alter table tb_planning add column show_installments_bill_name boolean not null default false;
