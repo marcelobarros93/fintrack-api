@@ -30,7 +30,7 @@ public class CreateBillScheduler {
             initialDelayString = "${scheduler.create.bill.initial-delay}")
     @Transactional
     public void execute() {
-        log.info("Start job create bills {}", LocalDateTime.now());
+        log.debug("Start job create bills {}", LocalDateTime.now());
 
         List<Planning> plannings = planningRepository.findToCreateBill();
 
@@ -53,6 +53,6 @@ public class CreateBillScheduler {
             }
         });
 
-        log.info("Finish job create bills {}", LocalDateTime.now());
+        log.debug("Finish job create bills {}", LocalDateTime.now());
     }
 }
