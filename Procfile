@@ -1,1 +1,1 @@
-web: java -Xms512m -Xmx512m -jar target/fintrack-api-0.0.1-SNAPSHOT.jar
+web: java -Xms400m -Xmx400m -jar target/fintrack-api-0.0.1-SNAPSHOT.jar
