@@ -43,3 +43,6 @@ security:
   token:
     secret-key: my-secret-key
     expiration-time-in-minutes: 60
+
+server:
+  port: ${PORT:8080}
