@@ -112,8 +112,8 @@ public class Planning extends AbstractEntity {
 
     public String getBillName() {
         if(Boolean.TRUE.equals(showInstallmentsInBillName)) {
-            var totalInstallments = ChronoUnit.MONTHS.between(startAt, endAt) + 1;
-            var currentInstallment = ChronoUnit.MONTHS.between(startAt, LocalDate.now()) + 1;
+            var totalInstallments = ChronoUnit.MONTHS.between(startAt.withDayOfMonth(1), endAt.withDayOfMonth(1)) + 1;
+            var currentInstallment = ChronoUnit.MONTHS.between(startAt.withDayOfMonth(1), LocalDate.now()) + 1;
             var counter = currentInstallment + "/" + totalInstallments;
             return description + " " + counter;
         } else {
