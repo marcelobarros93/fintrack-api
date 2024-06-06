@@ -1,24 +1,28 @@
 package com.example.fintrack.api.planning;
 
+import com.example.fintrack.api.category.Category;
 import com.example.fintrack.api.common.entity.AbstractEntity;
 import com.example.fintrack.api.common.enums.BillType;
 import com.example.fintrack.api.common.exception.BusinessException;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -64,9 +68,15 @@ public class Planning extends AbstractEntity {
     @Column(name = "show_installments_bill_name")
     private Boolean showInstallmentsInBillName;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     @Builder
-    public Planning(Long id, String description, BigDecimal amount, Integer dueDay, BillType type,
-                    LocalDate startAt, LocalDate endAt, Boolean active, Boolean showInstallmentsInBillName) {
+    public Planning(Long id, String description, BigDecimal amount,
+                    Integer dueDay, BillType type, LocalDate startAt,
+                    LocalDate endAt, Boolean active, Boolean showInstallmentsInBillName,
+                    Category category) {
         super(id);
         this.description = description;
         this.amount = amount;
@@ -76,6 +86,7 @@ public class Planning extends AbstractEntity {
         this.endAt = endAt;
         this.active = active;
         this.showInstallmentsInBillName = showInstallmentsInBillName;
+        this.category = category;
     }
 
     public void create(String userId) {

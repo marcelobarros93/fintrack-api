@@ -1,5 +1,6 @@
 package com.example.fintrack.api.expense;
 
+import com.example.fintrack.api.category.Category;
 import com.example.fintrack.api.common.enums.StatusType;
 import com.example.fintrack.api.common.exception.ExpenseNotFoundException;
 import com.example.fintrack.api.planning.Planning;
@@ -59,13 +60,14 @@ public class ExpenseService {
         expenseRepository.deleteById(id);
     }
 
-    public Expense buildByPlanning(Planning planning, LocalDate dateDue) {
+    public Expense buildByPlanning(Planning planning, LocalDate dateDue, Category category) {
         return Expense.builder()
                 .status(StatusType.OPEN)
                 .dateDue(dateDue)
                 .description(planning.getBillName())
                 .amount(planning.getAmount())
                 .planning(planning)
+                .category(category)
                 .build();
     }
 

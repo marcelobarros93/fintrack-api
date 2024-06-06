@@ -1,5 +1,6 @@
 package com.example.fintrack.api.income;
 
+import com.example.fintrack.api.category.Category;
 import com.example.fintrack.api.common.entity.Bill;
 import com.example.fintrack.api.common.enums.StatusType;
 import com.example.fintrack.api.common.exception.BusinessException;
@@ -31,8 +32,8 @@ public class Income extends Bill {
 
     @Builder
     public Income(Long id, OffsetDateTime dateReceipt, String description, BigDecimal amount,
-                  StatusType status, LocalDate dateDue, Planning planning) {
-        super(id, description, amount, status, dateDue, planning);
+                  StatusType status, LocalDate dateDue, Planning planning, Category category) {
+        super(id, description, amount, status, dateDue, planning, category);
         this.dateReceipt = dateReceipt;
     }
 

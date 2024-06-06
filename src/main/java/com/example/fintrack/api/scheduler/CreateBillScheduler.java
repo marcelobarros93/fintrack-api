@@ -44,11 +44,11 @@ public class CreateBillScheduler {
 
             if(planning.getType().equals(BillType.EXPENSE)) {
                 var expense = expenseService.buildByPlanning(
-                        planning, LocalDate.of(year, month, dueDay));
+                        planning, LocalDate.of(year, month, dueDay), planning.getCategory());
                 expenseService.create(expense, planning.getUserId());
             } else {
                 var income = incomeService.buildByPlanning(
-                        planning, LocalDate.of(year, month, dueDay));
+                        planning, LocalDate.of(year, month, dueDay), planning.getCategory());
                 incomeService.create(income, planning.getUserId());
             }
         });

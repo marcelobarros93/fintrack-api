@@ -1,5 +1,6 @@
 package com.example.fintrack.api.income;
 
+import com.example.fintrack.api.category.Category;
 import com.example.fintrack.api.common.enums.StatusType;
 import com.example.fintrack.api.common.exception.IncomeNotFoundException;
 import com.example.fintrack.api.planning.Planning;
@@ -59,13 +60,14 @@ public class IncomeService {
         incomeRepository.deleteById(id);
     }
 
-    public Income buildByPlanning(Planning planning, LocalDate dateDue) {
+    public Income buildByPlanning(Planning planning, LocalDate dateDue, Category category) {
         return Income.builder()
                 .status(StatusType.OPEN)
                 .dateDue(dateDue)
                 .description(planning.getBillName())
                 .amount(planning.getAmount())
                 .planning(planning)
+                .category(category)
                 .build();
     }
 

@@ -1,0 +1,1 @@
+alter table tb_category alter column updated_at set default (now() at time zone 'utc');
