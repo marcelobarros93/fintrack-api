@@ -1,6 +1,8 @@
 package com.example.fintrack.api.expense;
 
 import com.example.fintrack.api.category.Category;
+import com.example.fintrack.api.category.CategoryService;
+import com.example.fintrack.api.common.enums.BillType;
 import com.example.fintrack.api.common.enums.StatusType;
 import com.example.fintrack.api.common.exception.ExpenseNotFoundException;
 import com.example.fintrack.api.planning.Planning;
@@ -15,9 +17,11 @@ import java.time.LocalDate;
 public class ExpenseService {
 
     private final ExpenseRepository expenseRepository;
+    private final CategoryService categoryService;
 
     public Expense create(Expense expense, String userId) {
         expense.create(userId);
+        expense.setCategory(getCategory(expense, userId));
         return expenseRepository.save(expense);
     }
 
@@ -25,7 +29,8 @@ public class ExpenseService {
         var expenseSaved = findByIdAndUser(id, userId);
         expense.setStatus(expenseSaved.getStatus());
         expense.update();
-        BeanUtils.copyProperties(expense, expenseSaved, "id", "userId", "planning", "status", "version", "createdAt", "updatedAt");
+        BeanUtils.copyProperties(expense, expenseSaved, "id", "userId", "planning", "status", "version", "createdAt", "updatedAt", "category");
+        expenseSaved.setCategory(getCategory(expense, userId));
         return expenseRepository.save(expenseSaved);
     }
 
@@ -69,6 +74,17 @@ public class ExpenseService {
                 .planning(planning)
                 .category(category)
                 .build();
+    }
+
+    private Category getCategory(Expense expense, String userId) {
+        Category category = null;
+
+        if(expense.getCategory() != null) {
+            category = categoryService.findByIdAndUserIdAndType(
+                    expense.getCategory().getId(), userId, BillType.EXPENSE);
+        }
+
+        return category;
     }
 
 }

@@ -89,13 +89,20 @@ public class ExpenseResource {
     }
 
     public ExpenseResponse toResponse(Expense expense) {
+        Long categoryId = expense.getCategoryId();
+
+        if(categoryId == null && expense.getCategory() != null) {
+            categoryId = expense.getCategory().getId();
+        }
+
         return new ExpenseResponse(
                 expense.getId(),
                 expense.getDescription(),
                 expense.getAmount(),
                 expense.getDateDue(),
                 expense.getDatePayment(),
-                expense.getStatus());
+                expense.getStatus(),
+                categoryId);
     }
 
 }

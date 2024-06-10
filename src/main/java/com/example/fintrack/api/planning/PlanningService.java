@@ -1,5 +1,7 @@
 package com.example.fintrack.api.planning;
 
+import com.example.fintrack.api.category.Category;
+import com.example.fintrack.api.category.CategoryService;
 import com.example.fintrack.api.common.exception.PlanningNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -10,14 +12,11 @@ import org.springframework.stereotype.Service;
 public class PlanningService {
 
     private final PlanningRepository planningRepository;
+    private final CategoryService categoryService;
 
     public Planning create(Planning planning, String userId) {
-        if(planning.getCategory() != null) {
-            planning.create(userId, planning.getCategory().getType());
-        } else {
-            planning.create(userId);
-        }
-
+        planning.create(userId);
+        planning.setCategory(getCategory(planning, userId));
         return planningRepository.save(planning);
     }
 
@@ -25,7 +24,8 @@ public class PlanningService {
         planning.update();
         var planningSaved = findByIdAndUser(id, userId);
         BeanUtils.copyProperties(planning, planningSaved,
-                "id", "userId", "version", "createdAt", "updatedAt");
+                "id", "userId", "version", "createdAt", "updatedAt", "category");
+        planningSaved.setCategory(getCategory(planning, userId));
         return planningRepository.save(planningSaved);
     }
 
@@ -58,6 +58,17 @@ public class PlanningService {
         }
 
         planningRepository.deleteById(id);
+    }
+
+    private Category getCategory(Planning planning, String userId) {
+        Category category = null;
+
+        if(planning.getCategory() != null) {
+            category = categoryService.findByIdAndUserIdAndType(
+                    planning.getCategory().getId(), userId, planning.getType());
+        }
+
+        return category;
     }
 
 }

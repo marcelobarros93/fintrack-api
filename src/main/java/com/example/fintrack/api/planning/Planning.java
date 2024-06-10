@@ -98,17 +98,6 @@ public class Planning extends AbstractEntity {
         setUserId(userId);
     }
 
-    public void create(String userId, BillType categoryType) {
-        create(userId);
-        validateCategoryType(categoryType);
-    }
-
-    private void validateCategoryType(BillType categoryType) {
-        if(!type.equals(categoryType)) {
-            throw new BusinessException("The category type is different from the planning type");
-        }
-    }
-
     private void validatePlanningDates() {
         if(getStartAt().isAfter(getEndAt())) {
             throw new BusinessException("The date start cannot be greater than the date end");
@@ -117,10 +106,6 @@ public class Planning extends AbstractEntity {
 
     public void update() {
         validatePlanningDates();
-
-        if(category != null) {
-            validateCategoryType(category.getType());
-        }
     }
 
     public void activate() {

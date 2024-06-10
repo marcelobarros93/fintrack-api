@@ -12,5 +12,6 @@ public record ExpenseResponse (
         BigDecimal amount,
         LocalDate dateDue,
         OffsetDateTime datePayment,
-        StatusType status
+        StatusType status,
+        Long categoryId
 ) { }

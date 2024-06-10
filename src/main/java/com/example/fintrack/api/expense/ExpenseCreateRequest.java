@@ -1,5 +1,6 @@
 package com.example.fintrack.api.expense;
 
+import com.example.fintrack.api.category.Category;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -16,7 +17,9 @@ public record ExpenseCreateRequest(
         BigDecimal amount,
 
         @NotNull(message = "Date due is required")
-        LocalDate dateDue
+        LocalDate dateDue,
+
+        Long categoryId
 
 ) {
         public Expense toEntity() {
@@ -24,6 +27,7 @@ public record ExpenseCreateRequest(
                         .description(description)
                         .amount(amount)
                         .dateDue(dateDue)
+                        .category(categoryId != null ? new Category(categoryId) : null)
                         .build();
         }
 }

@@ -1,6 +1,6 @@
 package com.example.fintrack.api.expense;
 
-import com.example.fintrack.api.common.enums.StatusType;
+import com.example.fintrack.api.category.Category;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,14 +20,17 @@ public record ExpenseUpdateRequest(
         @NotNull(message = "Date due is required")
         LocalDate dateDue,
 
-        OffsetDateTime datePayment
+        OffsetDateTime datePayment,
+
+        Long categoryId
 ) {
-        public Expense toEntity() {
-                return Expense.builder()
-                        .description(description())
-                        .amount(amount())
-                        .dateDue(dateDue())
-                        .datePayment(datePayment())
-                        .build();
-        }
+    public Expense toEntity() {
+        return Expense.builder()
+                .description(description())
+                .amount(amount())
+                .dateDue(dateDue())
+                .datePayment(datePayment())
+                .category(categoryId != null ? new Category(categoryId) : null)
+                .build();
+    }
 }
