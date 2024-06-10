@@ -37,5 +37,7 @@ public record PlanningRequest(
         Boolean active,
 
         @NotNull(message = "Show installments in bill name is required")
-        Boolean showInstallmentsInBillName
+        Boolean showInstallmentsInBillName,
+
+        Long categoryId
 ) { }

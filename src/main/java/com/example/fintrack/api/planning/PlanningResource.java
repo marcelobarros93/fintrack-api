@@ -1,5 +1,8 @@
 package com.example.fintrack.api.planning;
 
+import com.example.fintrack.api.category.Category;
+import com.example.fintrack.api.category.CategoryRepository;
+import com.example.fintrack.api.category.CategoryService;
 import com.example.fintrack.api.common.security.SecurityUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import jakarta.validation.Valid;
+
 import java.net.URI;
 import java.time.YearMonth;
 
@@ -29,6 +33,7 @@ public class PlanningResource {
 
     private final PlanningRepository planningRepository;
     private final PlanningService planningService;
+    private final CategoryService categoryService;
     private final SecurityUtils securityUtils;
 
     @Operation(summary = "Find plannings by filter")
@@ -91,6 +96,13 @@ public class PlanningResource {
     }
 
     private Planning toEntity(PlanningRequest request) {
+        Category category = null;
+
+        if (request.categoryId() != null) {
+            category = categoryService.findByIdAndUserId(
+                    request.categoryId(), securityUtils.getUserId());
+        }
+
         return Planning.builder()
                 .amount(request.amount())
                 .description(request.description())
@@ -100,10 +112,17 @@ public class PlanningResource {
                 .type(request.type())
                 .active(request.active())
                 .showInstallmentsInBillName(request.showInstallmentsInBillName())
+                .category(category)
                 .build();
     }
 
     private PlanningResponse toResponse(Planning planning) {
+        Long categoryId = planning.getCategoryId();
+
+        if(categoryId == null && planning.getCategory() != null) {
+            categoryId = planning.getCategory().getId();
+        }
+
         return new PlanningResponse(
                 planning.getId(),
                 planning.getDescription(),
@@ -113,6 +132,7 @@ public class PlanningResource {
                 planning.getAmount(),
                 YearMonth.from(planning.getStartAt()),
                 YearMonth.from(planning.getEndAt()),
-                planning.getShowInstallmentsInBillName());
+                planning.getShowInstallmentsInBillName(),
+                categoryId);
     }
 }

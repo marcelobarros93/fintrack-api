@@ -14,5 +14,6 @@ public record PlanningResponse(
         BigDecimal amount,
         YearMonth startAt,
         YearMonth endAt,
-        Boolean showInstallmentsInBillName
+        Boolean showInstallmentsInBillName,
+        Long categoryId
 ) { }

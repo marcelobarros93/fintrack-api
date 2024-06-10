@@ -12,7 +12,12 @@ public class PlanningService {
     private final PlanningRepository planningRepository;
 
     public Planning create(Planning planning, String userId) {
-        planning.create(userId);
+        if(planning.getCategory() != null) {
+            planning.create(userId, planning.getCategory().getType());
+        } else {
+            planning.create(userId);
+        }
+
         return planningRepository.save(planning);
     }
 
