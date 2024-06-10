@@ -12,5 +12,6 @@ public record IncomeResponse(
         BigDecimal amount,
         LocalDate dateDue,
         OffsetDateTime dateReceipt,
-        StatusType status
+        StatusType status,
+        Long categoryId
 ) { }

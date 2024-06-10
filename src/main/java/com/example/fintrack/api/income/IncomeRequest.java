@@ -23,5 +23,7 @@ public record IncomeRequest(
         OffsetDateTime dateReceipt,
 
         @NotNull(message = "Status is required")
-        StatusType status
+        StatusType status,
+
+        Long categoryId
 ) { }

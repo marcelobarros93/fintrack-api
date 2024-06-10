@@ -1,5 +1,6 @@
 package com.example.fintrack.api.income;
 
+import com.example.fintrack.api.category.Category;
 import com.example.fintrack.api.common.security.SecurityUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -95,17 +96,25 @@ public class IncomeResource {
                 .dateDue(request.dateDue())
                 .dateReceipt(request.dateReceipt())
                 .status(request.status())
+                .category(request.categoryId() != null ? new Category(request.categoryId()) : null)
                 .build();
     }
 
     public IncomeResponse toResponse(Income income) {
+        Long categoryId = income.getCategoryId();
+
+        if(categoryId == null && income.getCategory() != null) {
+            categoryId = income.getCategory().getId();
+        }
+
         return new IncomeResponse(
                 income.getId(),
                 income.getDescription(),
                 income.getAmount(),
                 income.getDateDue(),
                 income.getDateReceipt(),
-                income.getStatus());
+                income.getStatus(),
+                categoryId);
     }
 
 }
