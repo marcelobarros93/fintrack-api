@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+
+    tools {
+        maven "Maven"
+    }
+
+    environment {
+        // Define environment variables if needed
+    }
+
+    stages {
+        stage('Initialize') {
+            steps {
+                // Initialize your pipeline
+                echo 'Starting...'
+                sh 'echo "PATH=$PATH"'
+                sh 'mvn --version'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Run Maven build
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                // Run tests
+                sh 'mvn test'
+            }
+        }
+
+    }
+
+    post {
+        always {
+            // Actions to perform after pipeline completion
+            echo 'Cleaning up...'
+            sh 'mvn clean'
+        }
+
+        success {
+            // Actions to perform if pipeline is successful
+            echo 'Build succeeded.'
+        }
+
+        failure {
+            // Actions to perform if pipeline fails
+            echo 'Build failed.'
+        }
+    }
+}
