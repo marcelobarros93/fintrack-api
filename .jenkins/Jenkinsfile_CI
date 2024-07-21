@@ -1,14 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        maven "Maven"
-    }
-
-    environment {
-        // Define environment variables if needed
-    }
-
     stages {
         stage('Initialize') {
             steps {
