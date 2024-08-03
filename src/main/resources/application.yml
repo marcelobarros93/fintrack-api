@@ -4,7 +4,7 @@ spring:
     username: postgres
     password: postgres
   jpa:
-    show-sql: false
+    show-sql: true
   mvc:
     format:
       date: iso

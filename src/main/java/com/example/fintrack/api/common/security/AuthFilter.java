@@ -28,13 +28,15 @@ public class AuthFilter extends OncePerRequestFilter {
                                     @Nonnull FilterChain filterChain) throws ServletException, IOException {
 
         var token = this.recoverToken(request);
-        if(token != null){
-            var details = tokenService.validateToken(token);
+
+        if(token != null && tokenService.validateToken(token)) {
+            var details = tokenService.getUserTokenDetails(token);
             UserDetails user = new User(details.id(), details.name(), details.email());
 
             var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+
         filterChain.doFilter(request, response);
     }
 

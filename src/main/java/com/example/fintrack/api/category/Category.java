@@ -37,5 +37,6 @@ public class Category extends AbstractEntity {
 
     public void create(String userId) {
         this.userId = userId;
+        this.active = true;
     }
 }

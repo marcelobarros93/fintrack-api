@@ -39,7 +39,20 @@ public class TokenService {
         }
     }
 
-    public UserTokenDetails validateToken(String token) {
+    public boolean validateToken(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            JWT.require(algorithm)
+                    .withIssuer(ISSUER)
+                    .build()
+                    .verify(token);
+            return true;
+        } catch (JWTVerificationException exception) {
+            return false;
+        }
+    }
+
+    public UserTokenDetails getUserTokenDetails(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             DecodedJWT decodedJWT = JWT.require(algorithm)

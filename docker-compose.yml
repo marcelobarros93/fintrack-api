@@ -13,11 +13,11 @@ services:
       - postgres-data:/var/lib/postgresql/data
       - ./initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
 
-  keycloack:
+  keycloak:
     image: quay.io/keycloak/keycloak:18.0.0
     environment:
-      KEYCLOAK_ADMIN: keycloack
-      KEYCLOAK_ADMIN_PASSWORD: keycloack
+      KEYCLOAK_ADMIN: keycloak
+      KEYCLOAK_ADMIN_PASSWORD: keycloak
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
       KC_DB_USERNAME: postgres
