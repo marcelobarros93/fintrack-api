@@ -2,9 +2,11 @@ package com.example.fintrack.api.planning;
 
 import com.example.fintrack.api.category.Category;
 import com.example.fintrack.api.category.CategoryService;
+import com.example.fintrack.api.common.exception.EntityInUseException;
 import com.example.fintrack.api.common.exception.PlanningNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -57,7 +59,11 @@ public class PlanningService {
             throw new PlanningNotFoundException(id);
         }
 
-        planningRepository.deleteById(id);
+        try {
+            planningRepository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new EntityInUseException("This planning has other associated records and cannot be deleted");
+        }
     }
 
     private Category getCategory(Planning planning, String userId) {

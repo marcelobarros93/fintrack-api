@@ -3,6 +3,7 @@ package com.example.fintrack.api.common.exception.handler;
 import com.example.fintrack.api.common.exception.AuthenticationException;
 import com.example.fintrack.api.common.exception.BusinessException;
 import com.example.fintrack.api.common.exception.EntityAlreadyExistsException;
+import com.example.fintrack.api.common.exception.EntityInUseException;
 import com.example.fintrack.api.common.exception.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -81,6 +82,14 @@ public class ApiExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<ApiError> handleAuthenticationException(AuthenticationException e) {
         var status = HttpStatus.UNAUTHORIZED;
+        var error = buildApiError(status.value(), e.getMessage());
+        return responseEntity(status, error);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ResponseEntity<ApiError> handleEntityInUseException(EntityInUseException e) {
+        var status = HttpStatus.BAD_REQUEST;
         var error = buildApiError(status.value(), e.getMessage());
         return responseEntity(status, error);
     }
