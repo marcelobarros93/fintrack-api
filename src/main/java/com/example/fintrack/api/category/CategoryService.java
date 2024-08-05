@@ -1,5 +1,6 @@
 package com.example.fintrack.api.category;
 
+import com.example.fintrack.api.common.cache.CacheName;
 import com.example.fintrack.api.common.enums.BillType;
 import com.example.fintrack.api.common.exception.CategoryNotFoundException;
 import com.example.fintrack.api.common.exception.EntityAlreadyExistsException;
@@ -14,7 +15,6 @@ import java.util.List;
 @Service
 public class CategoryService {
 
-    private static final String CACHE_NAME = "categories";
     private final CategoryRepository categoryRepository;
 
     public Category findByIdAndUserIdAndType(Long id, String userId, BillType type) {
@@ -22,12 +22,12 @@ public class CategoryService {
                 .orElseThrow(() -> new CategoryNotFoundException(id));
     }
 
-    @Cacheable(value = CACHE_NAME, key = "#userId + '-' + #type")
+    @Cacheable(value = CacheName.CATEGORIES, key = "#userId + '-' + #type", unless = "#result == null or #result.size() == 0")
     public List<Category> findByUserIdAndType(String userId, BillType type) {
         return categoryRepository.findByUserIdAndTypeOrderByName(userId, type);
     }
 
-    @CacheEvict(value = CACHE_NAME, key = "#userId + '-' + #category.type")
+    @CacheEvict(value = CacheName.CATEGORIES, key = "#userId + '-' + #category.type")
     public Category create(Category category, String userId) {
         category.create(userId);
         boolean exists = categoryRepository.existsByUserIdAndNameAndType(userId, category.getName(), category.getType());

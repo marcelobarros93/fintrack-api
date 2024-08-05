@@ -32,10 +32,14 @@ services:
 
   nginx:
     image: nginx
-    container_name: nginx
     ports:
       - "80:80"
       - "443:443"
     volumes:
       - ./.nginx:/etc/nginx
       - ./.cert:/cert
+
+  redis:
+    image: redis
+    ports:
+      - 6379:6379

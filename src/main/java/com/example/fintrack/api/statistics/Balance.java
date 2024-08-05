@@ -1,8 +1,9 @@
 package com.example.fintrack.api.statistics;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public record Balance(
+public record Balance (
     BigDecimal totalIncomeGivenMonth,
     BigDecimal totalIncomeLastMonth,
     BigDecimal differencePercentageIncome,
@@ -12,4 +13,4 @@ public record Balance(
     BigDecimal balanceGivenMonth,
     BigDecimal balanceLastMonth,
     BigDecimal differencePercentageBalance
-) { }
+) implements Serializable { }

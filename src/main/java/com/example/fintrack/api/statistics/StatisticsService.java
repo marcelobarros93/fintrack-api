@@ -1,9 +1,11 @@
 package com.example.fintrack.api.statistics;
 
+import com.example.fintrack.api.common.cache.CacheName;
 import com.example.fintrack.api.common.dto.MonthlyTotalDTO;
 import com.example.fintrack.api.expense.ExpenseRepository;
 import com.example.fintrack.api.income.IncomeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -19,6 +21,7 @@ public class StatisticsService {
     private final ExpenseRepository expenseRepository;
     private final IncomeRepository incomeRepository;
 
+    @Cacheable(value = CacheName.STATISTICS, key = "#userId + '-' + #month", unless = "#result == null")
     public Balance getBalance(YearMonth month, String userId) {
         var expenses =
                 expenseRepository.findTotalAmountByGivenMonthAndPreviousMonth(month, userId);
@@ -61,6 +64,7 @@ public class StatisticsService {
                 balanceGivenMonth, balanceLastMonth, differencePercentageBalance);
     }
 
+    @Cacheable(value = CacheName.STATISTICS, key = "#userId + '-' + #start + '-' + #end", unless = "#result == null")
     public PeriodOverview getPeriodOverview(YearMonth start, YearMonth end, String userId) {
         var expenses = expenseRepository.findTotalAmountByPeriod(start, end, userId);
         var incomes = incomeRepository.findTotalAmountByPeriod(start, end, userId);

@@ -13,6 +13,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Version;
+
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
@@ -20,7 +22,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class AbstractEntity {
+public abstract class AbstractEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
