@@ -21,7 +21,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExpenseQueryRepositoryImpl implements ExpenseQueryRepository {
 
-    public static final String USER_ID_PARAM = "userId";
+    private static final String USER_ID_PARAM = "userId";
+
     @Autowired
     @Lazy
     private ExpenseRepository expenseRepository;
