@@ -1,6 +1,9 @@
 package com.example.fintrack.api.income;
 
 import com.example.fintrack.api.common.dto.MonthlyTotalDTO;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Session;
@@ -12,15 +15,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.criteria.Predicate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
 public class IncomeQueryRepositoryImpl implements IncomeQueryRepository {
+
+    private static final String USER_ID = "userId";
 
     @Autowired @Lazy
     private IncomeRepository incomeRepository;
@@ -47,7 +49,7 @@ public class IncomeQueryRepositoryImpl implements IncomeQueryRepository {
 
         Query query = entityManager.unwrap(Session.class).createNativeQuery(sql);
         query.setParameter("givenMonth", month.atDay(1));
-        query.setParameter("userId", userId);
+        query.setParameter(USER_ID, userId);
         query.setResultTransformer(Transformers.aliasToBean(MonthlyTotalDTO.class));
         return query.getResultList();
     }
@@ -67,7 +69,7 @@ public class IncomeQueryRepositoryImpl implements IncomeQueryRepository {
         Query query = entityManager.unwrap(Session.class).createNativeQuery(sql);
         query.setParameter("start", start.atDay(1));
         query.setParameter("end", end.atDay(1));
-        query.setParameter("userId", userId);
+        query.setParameter(USER_ID, userId);
         query.setResultTransformer(Transformers.aliasToBean(MonthlyTotalDTO.class));
         return query.getResultList();
     }
@@ -76,7 +78,7 @@ public class IncomeQueryRepositoryImpl implements IncomeQueryRepository {
         return (income, query, builder) -> {
             var predicates = new ArrayList<Predicate>();
 
-            predicates.add(builder.equal(income.get("userId"), userId));
+            predicates.add(builder.equal(income.get(USER_ID), userId));
 
             if(filter.status() != null) {
                 predicates.add(builder.equal(income.get("status"), filter.status()));
@@ -107,6 +109,8 @@ public class IncomeQueryRepositoryImpl implements IncomeQueryRepository {
                 predicates.add(builder.lessThanOrEqualTo(
                         income.get("dateReceipt"), filter.dateReceiptEnd()));
             }
+
+            query.orderBy(builder.asc(income.get("description")));
 
             return builder.and(predicates.toArray(Predicate[]::new));
         };

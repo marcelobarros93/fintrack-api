@@ -109,6 +109,8 @@ public class ExpenseQueryRepositoryImpl implements ExpenseQueryRepository {
                         expense.get("datePayment"), filter.datePaymentEnd()));
             }
 
+            query.orderBy(builder.asc(expense.get("description")));
+
             return builder.and(predicates.toArray(Predicate[]::new));
         };
     }
