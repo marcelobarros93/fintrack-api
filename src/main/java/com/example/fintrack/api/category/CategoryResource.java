@@ -52,7 +52,7 @@ public class CategoryResource {
     private Category toEntity(CategoryCreateRequest request) {
         var category = new Category();
         category.setName(request.name());
-        category.setType(request.type());
+        category.setType(BillType.fromString(request.type()));
         return category;
     }
 

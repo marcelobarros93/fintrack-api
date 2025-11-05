@@ -1,6 +1,5 @@
 package com.example.fintrack.api.category;
 
-import com.example.fintrack.api.common.enums.BillType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -9,6 +8,6 @@ public record CategoryCreateRequest(
         String name,
 
         @NotNull(message = "Type is required")
-        BillType type
+        String type
 ) {
 }

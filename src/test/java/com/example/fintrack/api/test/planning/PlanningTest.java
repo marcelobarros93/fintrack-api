@@ -1,16 +1,17 @@
 package com.example.fintrack.api.test.planning;
 
-import com.example.fintrack.api.common.enums.BillType;
-import com.example.fintrack.api.common.exception.BusinessException;
-import com.example.fintrack.api.planning.Planning;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
+
+import com.example.fintrack.api.common.enums.BillType;
+import com.example.fintrack.api.common.exception.BusinessException;
+import com.example.fintrack.api.planning.Planning;
 
 class PlanningTest {
     
