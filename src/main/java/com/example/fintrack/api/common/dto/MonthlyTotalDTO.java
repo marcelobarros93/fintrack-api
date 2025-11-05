@@ -1,9 +1,9 @@
 package com.example.fintrack.api.common.dto;
 
-import lombok.Data;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
+
+import lombok.Data;
 
 @Data
 public class MonthlyTotalDTO implements Serializable {

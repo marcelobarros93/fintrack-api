@@ -3,13 +3,14 @@ volumes:
 
 services:
   postgres:
-    image: postgres
+    image: postgres:18
     environment:
       POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/18/data
     ports:
       - 5432:5432
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql
       - ./initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
 
   redis:

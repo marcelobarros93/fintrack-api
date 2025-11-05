@@ -6,9 +6,6 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Session;
-import org.hibernate.query.Query;
-import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
@@ -36,41 +33,41 @@ public class IncomeQueryRepositoryImpl implements IncomeQueryRepository {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<MonthlyTotalDTO> findTotalAmountByGivenMonthAndPreviousMonth(YearMonth month, String userId) {
         String sql = """
-            select to_char(e.date_due, 'yyyy-mm') as month, sum(e.amount) as total
-            from tb_income e
-            where (date_trunc_month(e.date_due) = date_trunc_month(:givenMonth)
-            or date_trunc_month(e.date_due) = date_trunc_month(:givenMonth) - INTERVAL '1 month')
-            and e.user_id = :userId
-            group by to_char(e.date_due, 'yyyy-mm')
-            order by to_char(e.date_due, 'yyyy-mm') asc;
+            SELECT to_char(e.date_due, 'yyyy-mm') AS month, CAST(sum(e.amount) AS decimal) AS total
+            FROM tb_income e
+            WHERE (date_trunc_month(e.date_due) = date_trunc_month(:givenMonth)
+            OR date_trunc_month(e.date_due) = date_trunc_month(:givenMonth) - INTERVAL '1 month')
+            AND e.user_id = :userId
+            GROUP BY to_char(e.date_due, 'yyyy-mm')
+            ORDER BY to_char(e.date_due, 'yyyy-mm') ASC
         """;
 
-        Query query = entityManager.unwrap(Session.class).createNativeQuery(sql);
+        var query = entityManager.createNativeQuery(sql, "MonthlyTotalDTOMapping");
         query.setParameter("givenMonth", month.atDay(1));
         query.setParameter(USER_ID, userId);
-        query.setResultTransformer(Transformers.aliasToBean(MonthlyTotalDTO.class));
         return query.getResultList();
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<MonthlyTotalDTO> findTotalAmountByPeriod(YearMonth start, YearMonth end, String userId) {
         String sql = """
-            select to_char(e.date_due, 'yyyy-mm') as month, sum(e.amount) as total
-            from tb_income e
-            where date_trunc_month(e.date_due) >= date_trunc_month(:start)
-            and date_trunc_month(e.date_due) <= date_trunc_month(:end)
-            and e.user_id = :userId
-            group by to_char(e.date_due, 'yyyy-mm')
-            order by to_char(e.date_due, 'yyyy-mm') asc;
+            SELECT to_char(e.date_due, 'yyyy-mm') AS month, CAST(sum(e.amount) AS decimal) AS total
+            FROM tb_income e
+            WHERE date_trunc_month(e.date_due) >= date_trunc_month(:start)
+            AND date_trunc_month(e.date_due) <= date_trunc_month(:end)
+            AND e.user_id = :userId
+            GROUP BY to_char(e.date_due, 'yyyy-mm')
+            ORDER BY to_char(e.date_due, 'yyyy-mm') ASC
         """;
 
-        Query query = entityManager.unwrap(Session.class).createNativeQuery(sql);
+        var query = entityManager.createNativeQuery(sql, "MonthlyTotalDTOMapping");
         query.setParameter("start", start.atDay(1));
         query.setParameter("end", end.atDay(1));
         query.setParameter(USER_ID, userId);
-        query.setResultTransformer(Transformers.aliasToBean(MonthlyTotalDTO.class));
         return query.getResultList();
     }
 

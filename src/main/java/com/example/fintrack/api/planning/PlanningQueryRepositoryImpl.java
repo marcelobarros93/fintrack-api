@@ -32,6 +32,7 @@ public class PlanningQueryRepositoryImpl implements PlanningQueryRepository {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Planning> findToCreateBill() {
         String sql = """
             select * from tb_planning p
