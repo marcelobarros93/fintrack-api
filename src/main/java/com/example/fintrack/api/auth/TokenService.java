@@ -34,7 +34,7 @@ public class TokenService {
                     .withClaim("userId", user.getId())
                     .withClaim("userName", user.getName())
                     .sign(Algorithm.HMAC256(secret));
-        } catch (JWTCreationException exception) {
+        } catch (JWTCreationException _) {
             throw new AuthenticationException("Bad credentials");
         }
     }
@@ -47,7 +47,7 @@ public class TokenService {
                     .build()
                     .verify(token);
             return true;
-        } catch (JWTVerificationException exception) {
+        } catch (JWTVerificationException _) {
             return false;
         }
     }
@@ -63,7 +63,7 @@ public class TokenService {
                     decodedJWT.getClaim("userId").asString(),
                     decodedJWT.getClaim("userName").asString(),
                     decodedJWT.getSubject());
-        } catch (JWTVerificationException exception) {
+        } catch (JWTVerificationException _) {
             throw new AuthenticationException("Invalid token");
         }
     }

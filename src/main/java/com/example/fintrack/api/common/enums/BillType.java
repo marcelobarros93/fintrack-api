@@ -9,7 +9,7 @@ public enum BillType {
     public static BillType fromString(String value) {
         try {
             return BillType.valueOf(value.toUpperCase());
-        } catch (Exception e) {
+        } catch (Exception _) {
             throw new BusinessException("Invalid bill type");
         }
     }

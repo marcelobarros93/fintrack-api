@@ -1,10 +1,4 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/fintrack
-    username: postgres
-    password: postgres
-  jpa:
-    show-sql: false
   mvc:
     format:
       date: iso
@@ -41,7 +35,6 @@ security:
     allowedMethods: GET,POST,PUT,DELETE
     allowedHeaders: "*"
   token:
-    secret-key: my-secret-key
     expiration-time-in-minutes: 60
 
 server:

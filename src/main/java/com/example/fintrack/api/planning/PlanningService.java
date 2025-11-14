@@ -61,7 +61,7 @@ public class PlanningService {
 
         try {
             planningRepository.deleteById(id);
-        } catch (DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException _) {
             throw new EntityInUseException("This planning has other associated records and cannot be deleted");
         }
     }

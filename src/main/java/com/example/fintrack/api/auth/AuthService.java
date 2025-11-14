@@ -22,7 +22,7 @@ public class AuthService {
             var auth = this.authenticationManager.authenticate(usernamePassword);
             var token = tokenService.generateToken((User) auth.getPrincipal());
             return new LoginResponse(token);
-        } catch (Exception e) {
+        } catch (Exception _) {
             throw new AuthenticationException("Bad credentials");
         }
     }
