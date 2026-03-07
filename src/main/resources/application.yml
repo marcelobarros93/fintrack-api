@@ -14,9 +14,11 @@ scheduler:
 springdoc:
   api-docs:
     path: /api-docs
+    enabled: false
   swagger-ui:
     path: /swagger-ui.html
     operationsSorter: method
+    enabled: false
 
 management:
   endpoint:
