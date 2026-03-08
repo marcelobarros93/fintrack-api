@@ -1,6 +1,9 @@
 package com.example.fintrack.api.common.cache;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.support.NoOpCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -15,7 +18,14 @@ import java.util.Map;
 public class CacheConfig {
 
     @Bean
-    public RedisCacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
+    @ConditionalOnProperty(name = "cache.enabled", havingValue = "false", matchIfMissing = true)
+    public CacheManager noOpCacheManager() {
+        return new NoOpCacheManager();
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "cache.enabled", havingValue = "true")
+    public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
         // Default cache configuration
         RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig();
 
