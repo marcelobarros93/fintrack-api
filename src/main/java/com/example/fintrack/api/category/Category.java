@@ -2,7 +2,11 @@ package com.example.fintrack.api.category;
 
 import com.example.fintrack.api.common.entity.AbstractEntity;
 import com.example.fintrack.api.common.enums.BillType;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -38,5 +42,9 @@ public class Category extends AbstractEntity {
     public void create(String userId) {
         this.userId = userId;
         this.active = true;
+    }
+
+    public void toggleActive() {
+        this.active = !this.active;
     }
 }

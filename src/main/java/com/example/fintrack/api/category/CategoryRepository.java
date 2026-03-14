@@ -10,6 +10,8 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     List<Category> findByUserIdAndTypeOrderByName(String userId, BillType type);
 
+    Optional<Category> findByIdAndUserId(Long id, String userId);
+
     Optional<Category> findByIdAndUserIdAndType(Long id, String userId, BillType type);
 
     boolean existsByUserIdAndNameAndType(String userId, String name, BillType type);

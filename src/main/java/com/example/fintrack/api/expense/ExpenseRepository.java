@@ -11,4 +11,6 @@ public interface ExpenseRepository extends
         ExpenseQueryRepository,
         JpaSpecificationExecutor<Expense>,
         CommonQueryByUserExecutor<Expense> {
+
+    boolean existsByCategoryId(Long categoryId);
 }

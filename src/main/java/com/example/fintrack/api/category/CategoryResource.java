@@ -7,9 +7,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,6 +51,28 @@ public class CategoryResource {
         return ResponseEntity.created(location).body(toResponse(category));
     }
 
+    @Operation(summary = "Update category name")
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoryResponse> update(@PathVariable Long id,
+                                                   @Valid @RequestBody CategoryUpdateRequest request) {
+        var category = categoryService.update(id, request, securityUtils.getUserId());
+        return ResponseEntity.ok(toResponse(category));
+    }
+
+    @Operation(summary = "Toggle category active status")
+    @PutMapping("/{id}/active")
+    public ResponseEntity<CategoryResponse> toggleActive(@PathVariable Long id) {
+        var category = categoryService.toggleActive(id, securityUtils.getUserId());
+        return ResponseEntity.ok(toResponse(category));
+    }
+
+    @Operation(summary = "Delete category")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        categoryService.delete(id, securityUtils.getUserId());
+        return ResponseEntity.noContent().build();
+    }
+
     private Category toEntity(CategoryCreateRequest request) {
         var category = new Category();
         category.setName(request.name());
@@ -57,6 +81,6 @@ public class CategoryResource {
     }
 
     private CategoryResponse toResponse(Category category) {
-        return new CategoryResponse(category.getId(), category.getName(), category.getType());
+        return new CategoryResponse(category.getId(), category.getName(), category.getType(), category.getActive());
     }
 }

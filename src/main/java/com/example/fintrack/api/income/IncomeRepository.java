@@ -12,4 +12,5 @@ public interface IncomeRepository extends
         JpaSpecificationExecutor<Income>,
         CommonQueryByUserExecutor<Income> {
 
+    boolean existsByCategoryId(Long categoryId);
 }
