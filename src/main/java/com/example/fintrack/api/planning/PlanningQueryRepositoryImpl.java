@@ -33,18 +33,19 @@ public class PlanningQueryRepositoryImpl implements PlanningQueryRepository {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Planning> findToCreateBill() {
+    public List<Planning> findToCreateBill(LocalDate referenceDate) {
         String sql = """
             select * from tb_planning p
             where p.active = true
-            and date_trunc('month', p.start_at) <= date_trunc('month', now())
-            and date_trunc('month', p.end_at) >= date_trunc('month', now())
+            and date_trunc('month', p.start_at) <= date_trunc('month', cast(:referenceDate as date))
+            and date_trunc('month', p.end_at) >= date_trunc('month', cast(:referenceDate as date))
             and p.id not in (select planning_id from tb_expense e where e.planning_id is not null
-                                and date_trunc('month', e.date_due) = date_trunc('month', now()))
+                                and date_trunc('month', e.date_due) = date_trunc('month', cast(:referenceDate as date)))
             and p.id not in (select planning_id from tb_income i where i.planning_id is not null
-                                and date_trunc('month', i.date_due) = date_trunc('month', now()));
+                                and date_trunc('month', i.date_due) = date_trunc('month', cast(:referenceDate as date)));
         """;
         Query query = entityManager.createNativeQuery(sql, Planning.class);
+        query.setParameter("referenceDate", referenceDate);
         return query.getResultList();
     }
 

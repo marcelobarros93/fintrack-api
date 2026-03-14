@@ -32,17 +32,24 @@ public class CreateBillScheduler {
     public void execute() {
         log.debug("Start job create bills {}", LocalDateTime.now());
 
-        List<Planning> plannings = planningRepository.findToCreateBill();
-
         LocalDate now = LocalDate.now();
-        int year = now.getYear();
-        Month month = now.getMonth();
-        int lastDayOfMonth = month.length(now.isLeapYear());
+        createBillsForMonth(now);
+        createBillsForMonth(now.plusMonths(1));
+
+        log.debug("Finish job create bills {}", LocalDateTime.now());
+    }
+
+    private void createBillsForMonth(LocalDate referenceDate) {
+        List<Planning> plannings = planningRepository.findToCreateBill(referenceDate);
+
+        int year = referenceDate.getYear();
+        Month month = referenceDate.getMonth();
+        int lastDayOfMonth = month.length(referenceDate.isLeapYear());
 
         plannings.forEach(planning -> {
             int dueDay = planning.getDueDay() > lastDayOfMonth ? lastDayOfMonth : planning.getDueDay();
 
-            if(planning.getType().equals(BillType.EXPENSE)) {
+            if (planning.getType().equals(BillType.EXPENSE)) {
                 var expense = expenseService.buildByPlanning(
                         planning, LocalDate.of(year, month, dueDay), planning.getCategory());
                 expenseService.create(expense, planning.getUserId());
@@ -52,7 +59,5 @@ public class CreateBillScheduler {
                 incomeService.create(income, planning.getUserId());
             }
         });
-
-        log.debug("Finish job create bills {}", LocalDateTime.now());
     }
 }
